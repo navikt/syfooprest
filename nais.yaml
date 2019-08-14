@@ -1,0 +1,64 @@
+# ref https://raw.githubusercontent.com/nais/naisd/master/nais_example.yaml
+image: docker.adeo.no:5000/digisyfo/restoppfoelgingsdialog
+team: teamsykefravr
+webproxy: true
+replicas:
+  min: 1
+  max: 2
+  cpuThresholdPercentage: 50
+port: 8080
+healthcheck:
+  liveness:
+    path: restoppfoelgingsdialog/internal/isAlive
+    initialDelay: 120
+    timeout: 1
+    periodSeconds: 10
+    failureThreshold: 3
+  readiness:
+    path: restoppfoelgingsdialog/internal/isAlive
+    initialDelay: 120
+    timeout: 1
+prometheus:
+  enabled: true
+  path: restoppfoelgingsdialog/internal/metrics
+resources:
+  limits:
+    cpu: 3000m
+    memory: 2048Mi
+  requests:
+    cpu: 500m
+    memory: 1024Mi
+fasitResources:
+  used:
+  - alias: srvrestoppfoelgingsdialog
+    resourceType: credential
+  - alias: appdynamics
+    resourceType: applicationproperties
+  - alias: tjenester
+    resourceType: baseUrl
+  - alias: SecurityTokenService
+    resourceType: baseurl
+  - alias: openam
+    resourceType: openam
+  - alias: servicegateway
+    resourceType: webservicegateway
+    propertyMap:
+      url: SERVICEGATEWAY_URL
+  - alias: virksomhet:Organisasjon_v4
+    resourceType: webserviceendpoint
+  - alias: virksomhet:DigitalKontakinformasjon_v1
+    resourceType: webserviceendpoint
+  - alias: Aktoer_v2
+    resourceType: webserviceendpoint
+  - alias: virksomhet:Arbeidsforhold_v3
+    resourceType: webserviceendpoint
+  - alias: virksomhet:Brukerprofil_v3
+    resourceType: webserviceendpoint
+  - alias: Sykefravaersoppfoelging_v1
+    resourceType: webserviceendpoint
+  - alias: oppfoelgingsdialog.properties
+    resourceType: applicationProperties
+  exposed:
+  - alias: oppfoelgingsdialogapi
+    resourceType: restservice
+    path: /restoppfoelgingsdialog/api
