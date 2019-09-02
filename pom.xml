@@ -6,9 +6,9 @@
     <packaging>war</packaging>
 
     <parent>
-        <groupId>no.nav.sbl</groupId>
+        <groupId>no.nav.common</groupId>
         <artifactId>mor-pom</artifactId>
-        <version>2018.06.07.17.08</version>
+        <version>1.2019.04.30-17.04-3d8bebacf430</version>
     </parent>
 
     <groupId>no.nav.syfo</groupId>
@@ -36,7 +36,7 @@
             <dependency>
                 <groupId>no.nav.sbl</groupId>
                 <artifactId>bom</artifactId>
-                <version>2018.06.07.17.08</version>
+                <version>1.2019.04.30-17.04-3d8bebacf430</version>
                 <type>pom</type>
                 <scope>import</scope>
                 <exclusions>
