@@ -1,5 +1,6 @@
 import localhost.ApplicationConfigTest;
 import no.nav.syfo.config.*;
+import no.nav.testconfig.ApiAppTest;
 
 import static no.nav.apiapp.ApiApp.startApp;
 import static no.nav.sbl.util.EnvironmentUtils.Type.PUBLIC;
@@ -8,9 +9,10 @@ import static no.nav.testconfig.ApiAppTest.setupTestContext;
 
 public class MainTest {
     public static final String TEST_PORT = "8580";
+    private static final String APPLICATION_NAME = "oppfoelgingsdialogrest";
 
     public static void main(String[] args) throws Exception {
-        setupTestContext();
+        setupTestContext(ApiAppTest.Config.builder().applicationName(APPLICATION_NAME).build());
 
         setupWSTestProperties();
         setupMockTestProperties();

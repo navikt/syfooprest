@@ -1,3 +1,4 @@
+import no.nav.apiapp.ApiApp;
 import no.nav.syfo.config.*;
 
 import java.net.InetAddress;
@@ -5,7 +6,6 @@ import java.net.UnknownHostException;
 
 import static java.lang.System.getProperty;
 import static java.lang.System.getenv;
-import static no.nav.apiapp.ApiApp.startApp;
 import static no.nav.sbl.util.EnvironmentUtils.Type.PUBLIC;
 import static no.nav.sbl.util.EnvironmentUtils.getRequiredProperty;
 import static no.nav.sbl.util.EnvironmentUtils.setProperty;
@@ -24,7 +24,7 @@ public class Main {
         setProperty(TpsConfig.ENDEPUNKT_URL_KEY, getRequiredProperty(SERVICEGATEWAY_URL, TpsConfig.ENDEPUNKT_URL_KEY), PUBLIC);
 
         setupMetricsProperties();
-        startApp(ApplicationConfig.class, args);
+        ApiApp.runApp(ApplicationConfig.class, args);
     }
 
     private static void setupMetricsProperties() throws UnknownHostException {
