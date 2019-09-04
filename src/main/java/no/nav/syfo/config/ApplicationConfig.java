@@ -7,8 +7,6 @@ import no.nav.metrics.aspects.TimerAspect;
 import no.nav.syfo.config.caching.CacheConfig;
 import org.springframework.context.annotation.*;
 
-import static no.nav.apiapp.ApiApplication.Sone.SBS;
-
 @Configuration
 @EnableAspectJAutoProxy
 @Import({
@@ -22,7 +20,7 @@ import static no.nav.apiapp.ApiApplication.Sone.SBS;
         SykefravaersoppfoelgingV1Config.class,
 })
 @ComponentScan(basePackages = "no.nav.syfo.rest")
-public class ApplicationConfig implements ApiApplication.NaisApiApplication {
+public class ApplicationConfig implements ApiApplication{
 
     @Bean
     public TimerAspect timerAspect() {
@@ -32,16 +30,6 @@ public class ApplicationConfig implements ApiApplication.NaisApiApplication {
     @Bean
     public CountAspect countAspect() {
         return new CountAspect();
-    }
-
-    @Override
-    public String getApplicationName() {
-        return "restoppfoelgingsdialog";
-    }
-
-    @Override
-    public Sone getSone() {
-        return SBS;
     }
 
     @Override

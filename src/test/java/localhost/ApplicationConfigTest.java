@@ -1,7 +1,6 @@
 package localhost;
 
 
-import no.nav.apiapp.ApiApplication;
 import no.nav.apiapp.config.ApiAppConfigurator;
 import no.nav.syfo.config.ApplicationConfig;
 import org.springframework.context.annotation.Configuration;
@@ -23,10 +22,5 @@ public class ApplicationConfigTest extends ApplicationConfig {
     public void startup(ServletContext servletContext) {
         servletContext.addFilter("corsFilter", CORSFilter.class)
                 .addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), false, "/*");;
-    }
-
-    @Override
-    public ApiApplication.Sone getSone() {
-        return null;
     }
 }
