@@ -1,11 +1,15 @@
 package no.nav.syfo.services;
 
+import no.nav.security.oidc.context.OIDCRequestContextHolder;
+import no.nav.syfo.config.SykefravaersoppfoelgingV1Config;
 import no.nav.syfo.model.NaermesteLeder;
+import no.nav.syfo.oidc.OIDCIssuer;
 import no.nav.syfo.rest.domain.RSNaermesteLeder;
 import no.nav.tjeneste.virksomhet.sykefravaersoppfoelging.v1.*;
 import no.nav.tjeneste.virksomhet.sykefravaersoppfoelging.v1.meldinger.*;
 import org.slf4j.Logger;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.ws.rs.ForbiddenException;
@@ -14,52 +18,67 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
-import static no.nav.common.auth.SubjectHandler.getIdent;
-import static no.nav.sbl.java8utils.MapUtil.map;
-import static no.nav.sbl.java8utils.MapUtil.mapListe;
 import static no.nav.syfo.mappers.WSAnsattMapper.wsAnsatt2AktorId;
 import static no.nav.syfo.mappers.WSNaermesteLederMapper.ws2naermesteLeder;
 import static no.nav.syfo.mappers.WSNaermesteLederMapper.ws2rsnaermesteleder;
+import static no.nav.syfo.utils.MapUtil.map;
+import static no.nav.syfo.utils.MapUtil.mapListe;
+import static no.nav.syfo.utils.OIDCUtil.getIssuerToken;
 import static org.slf4j.LoggerFactory.getLogger;
 
+@Service
 public class NaermesteLederService {
     private static final Logger LOG = getLogger(NaermesteLederService.class);
 
+    private final OIDCRequestContextHolder oidcContextHolder;
+    private final SykefravaersoppfoelgingV1Config sykefravaersoppfoelgingConfig;
+
     @Inject
-    private SykefravaersoppfoelgingV1 sykefravaersoppfoelgingV1;
+    public NaermesteLederService(
+            OIDCRequestContextHolder oidcContextHolder,
+            SykefravaersoppfoelgingV1Config sykefravaersoppfoelgingConfig
+    ) {
+        this.oidcContextHolder = oidcContextHolder;
+        this.sykefravaersoppfoelgingConfig = sykefravaersoppfoelgingConfig;
+    }
 
 
-    @Cacheable(value = "syfo", keyGenerator = "userkeygenerator")
+    @Cacheable(cacheNames = "ansatteByAktorId", key = "#aktorId", condition = "#aktorId != null")
     public List<String> hentAnsatteAktorId(String aktorId) {
         try {
-            WSHentNaermesteLedersAnsattListeResponse response = sykefravaersoppfoelgingV1
-                    .hentNaermesteLedersAnsattListe(new WSHentNaermesteLedersAnsattListeRequest()
-                            .withAktoerId(aktorId));
+            String oidcToken = getIssuerToken(this.oidcContextHolder, OIDCIssuer.EKSTERN);
+            WSHentNaermesteLedersAnsattListeRequest request = new WSHentNaermesteLedersAnsattListeRequest()
+                    .withAktoerId(aktorId);
+            WSHentNaermesteLedersAnsattListeResponse response = sykefravaersoppfoelgingConfig.hentNaermesteLedersAnsattListe(request, oidcToken);
+
             return mapListe(response.getAnsattListe(), wsAnsatt2AktorId);
         } catch (HentNaermesteLedersAnsattListeSikkerhetsbegrensning e) {
-            LOG.warn("{} fikk sikkerhetsbegrensning ved henting av ansatte for person {}", getIdent(), aktorId);
+            LOG.warn("Fikk sikkerhetsbegrensning ved henting av ansatte for person {}", aktorId);
             throw new ForbiddenException();
         } catch (RuntimeException e) {
-            LOG.error("{} fikk Runtimefeil ved henting av ansatte for person {}. " +
-                    "Antar dette er tilgang nektet fra modig-security, og kaster ForbiddenException videre.", getIdent(), aktorId, e);
+            LOG.error("Fikk Runtimefeil ved henting av ansatte for person {}. " +
+                    "Antar dette er tilgang nektet fra modig-security, og kaster ForbiddenException videre.", aktorId, e);
             //TODO RuntimeException når SyfoService kaster sikkerhetsbegrensing riktig igjen
             throw new ForbiddenException();
         }
     }
 
-    @Cacheable(value = "syfo", keyGenerator = "userkeygenerator")
+    @Cacheable(cacheNames = "ledereByAktorId", key = "#aktoerId", condition = "#aktoerId != null")
     public List<NaermesteLeder> hentNaermesteLedere(String aktoerId) {
         try {
-            WSHentNaermesteLederListeResponse response = sykefravaersoppfoelgingV1.hentNaermesteLederListe(new WSHentNaermesteLederListeRequest()
+            String oidcToken = getIssuerToken(this.oidcContextHolder, OIDCIssuer.EKSTERN);
+            WSHentNaermesteLederListeRequest request = new WSHentNaermesteLederListeRequest()
                     .withAktoerId(aktoerId)
-                    .withKunAktive(false));
+                    .withKunAktive(false);
+            WSHentNaermesteLederListeResponse response = sykefravaersoppfoelgingConfig.hentNaermesteLederListe(request, oidcToken);
+
             return mapListe(response.getNaermesteLederListe(), ws2naermesteLeder);
         } catch (HentNaermesteLederListeSikkerhetsbegrensning e) {
-            LOG.warn("{} fikk sikkerhetsbegrensning ved henting av naermeste ledere for person {}", getIdent(), aktoerId);
+            LOG.warn("Fikk sikkerhetsbegrensning ved henting av naermeste ledere for person {}", aktoerId);
             throw new ForbiddenException();
         } catch (RuntimeException e) {
-            LOG.error("{} fikk Runtimefeil ved henting av naermeste ledere for person {}" +
-                    "Antar dette er tilgang nektet fra modig-security, og kaster ForbiddenException videre.", getIdent(), aktoerId, e);
+            LOG.error("Fikk Runtimefeil ved henting av naermeste ledere for person {}" +
+                    "Antar dette er tilgang nektet fra modig-security, og kaster ForbiddenException videre.", aktoerId, e);
             //TODO RuntimeException når SyfoService kaster sikkerhetsbegrensing riktig igjen
             throw new ForbiddenException();
         }
@@ -71,13 +90,16 @@ public class NaermesteLederService {
                 .collect(toList());
     }
 
-    @Cacheable(value = "syfo", keyGenerator = "userkeygenerator")
+    @Cacheable(cacheNames = "lederByAktorIdAndVirksomhet", key = "#aktoerId.concat(#virksomhetsnummer)", condition = "#aktoerId != null && #virksomhetsnummer != null")
     public RSNaermesteLeder hentNaermesteLeder(String aktoerId, String virksomhetsnummer) {
-
         try {
-            WSHentNaermesteLederResponse response = sykefravaersoppfoelgingV1.hentNaermesteLeder(new WSHentNaermesteLederRequest()
+            String oidcToken = getIssuerToken(this.oidcContextHolder, OIDCIssuer.EKSTERN);
+
+            WSHentNaermesteLederRequest request = new WSHentNaermesteLederRequest()
                     .withAktoerId(aktoerId)
-                    .withOrgnummer(virksomhetsnummer));
+                    .withOrgnummer(virksomhetsnummer);
+            WSHentNaermesteLederResponse response = sykefravaersoppfoelgingConfig.hentNaermesteLeder(request, oidcToken);
+
             if (response.getNaermesteLeder() == null) {
                 throw new NotFoundException();
             }
@@ -89,7 +111,7 @@ public class NaermesteLederService {
 
     }
 
-    @Cacheable(value = "syfo", keyGenerator = "userkeygenerator")
+    @Cacheable(cacheNames = "forrigeLederByAktorIdAndVirksomhet", key = "#aktoerid.concat(#virksomhetsnummer)", condition = "#aktoerid != null && #virksomhetsnummer != null")
     public Optional<RSNaermesteLeder> hentForrigeNaermesteLeder(String aktoerid, String virksomhetsnummer) {
         List<RSNaermesteLeder> naermesteLedere = hentNaermesteLedere(aktoerid, false, virksomhetsnummer);
 
@@ -101,10 +123,13 @@ public class NaermesteLederService {
 
     protected List<RSNaermesteLeder> hentNaermesteLedere(String aktoerId, boolean kunAktive, String virksomhetsnummer) {
         try {
-            WSHentNaermesteLederListeResponse wsNaermesteLederListeResponse = sykefravaersoppfoelgingV1.hentNaermesteLederListe(new WSHentNaermesteLederListeRequest()
+            String oidcToken = getIssuerToken(this.oidcContextHolder, OIDCIssuer.EKSTERN);
+            WSHentNaermesteLederListeRequest request = new WSHentNaermesteLederListeRequest()
                     .withAktoerId(aktoerId)
-                    .withKunAktive(kunAktive));
-            return mapListe(wsNaermesteLederListeResponse.getNaermesteLederListe(), ws2rsnaermesteleder)
+                    .withKunAktive(kunAktive);
+            WSHentNaermesteLederListeResponse response = sykefravaersoppfoelgingConfig.hentNaermesteLederListe(request, oidcToken);
+
+            return mapListe(response.getNaermesteLederListe(), ws2rsnaermesteleder)
                     .stream()
                     .filter(rsNaermesteLeder -> rsNaermesteLeder.virksomhetsnummer.equals(virksomhetsnummer))
                     .collect(toList());
@@ -112,5 +137,4 @@ public class NaermesteLederService {
             throw new ForbiddenException();
         }
     }
-
 }

@@ -1,43 +1,48 @@
 package no.nav.syfo.services;
 
+import org.springframework.stereotype.Service;
+
 import javax.inject.Inject;
 
-import static no.nav.common.auth.SubjectHandler.getIdent;
-
-
+@Service
 public class TilgangskontrollService {
 
-    @Inject
-    private AktoerService aktoerService;
-    @Inject
-    private NaermesteLederService naermesteLederService;
+    private final AktoerService aktoerService;
+    private final NaermesteLederService naermesteLederService;
 
-    public boolean sporOmNoenAndreEnnSegSelvEllerEgneAnsatteEllerLedere(String oppslaattAktoerId) {
-        String innloggetIdent = getIdent().orElseThrow(IllegalArgumentException::new);
+    @Inject
+    public TilgangskontrollService(
+            AktoerService aktoerService,
+            NaermesteLederService naermesteLederService
+    ) {
+        this.aktoerService = aktoerService;
+        this.naermesteLederService = naermesteLederService;
+    }
+
+    public boolean sporOmNoenAndreEnnSegSelvEllerEgneAnsatteEllerLedere(String innloggetFnr, String oppslaattAktoerId) {
         String oppslaattFnr = aktoerService.hentFnrForAktoer(oppslaattAktoerId);
-        return !(sporInnloggetBrukerOmSegSelv(innloggetIdent, oppslaattFnr) || sporInnloggetBrukerOmEnAnsatt(innloggetIdent, oppslaattAktoerId) || sporInnloggetBrukerOmEnLeder(innloggetIdent, oppslaattAktoerId));
+        return !(sporInnloggetBrukerOmSegSelv(innloggetFnr, oppslaattFnr) || sporInnloggetBrukerOmEnAnsatt(innloggetFnr, oppslaattAktoerId) || sporInnloggetBrukerOmEnLeder(innloggetFnr, oppslaattAktoerId));
     }
 
 
-    public boolean sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(String oppslaattAktoerId) {
-        String innloggetIdent = getIdent().orElseThrow(IllegalArgumentException::new);
+    public boolean sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(String innloggetFnr, String oppslaattAktoerId) {
         String oppslaattFnr = aktoerService.hentFnrForAktoer(oppslaattAktoerId);
-        return !(sporInnloggetBrukerOmSegSelv(innloggetIdent, oppslaattFnr) || sporInnloggetBrukerOmEnAnsatt(innloggetIdent, oppslaattAktoerId));
+        return !(sporInnloggetBrukerOmSegSelv(innloggetFnr, oppslaattFnr) || sporInnloggetBrukerOmEnAnsatt(innloggetFnr, oppslaattAktoerId));
     }
 
-    private boolean sporInnloggetBrukerOmEnAnsatt(String innloggetIdent, String oppslaattAktoerId) {
-        String innloggetAktoerId = aktoerService.hentAktoerIdForFnr(innloggetIdent);
+    private boolean sporInnloggetBrukerOmEnAnsatt(String innloggetFnr, String oppslaattAktoerId) {
+        String innloggetAktoerId = aktoerService.hentAktoerIdForFnr(innloggetFnr);
         return naermesteLederService.hentAnsatteAktorId(innloggetAktoerId).stream()
                 .anyMatch(oppslaattAktoerId::equals);
     }
 
-    private boolean sporInnloggetBrukerOmEnLeder(String innloggetIdent, String oppslaattAktoerId) {
-        String innloggetAktoerId = aktoerService.hentAktoerIdForFnr(innloggetIdent);
+    private boolean sporInnloggetBrukerOmEnLeder(String innloggetFnr, String oppslaattAktoerId) {
+        String innloggetAktoerId = aktoerService.hentAktoerIdForFnr(innloggetFnr);
         return naermesteLederService.hentNaermesteLederAktoerIdListe(innloggetAktoerId).stream()
                 .anyMatch(oppslaattAktoerId::equals);
     }
 
-    private boolean sporInnloggetBrukerOmSegSelv(String innloggetIdent, String fnr) {
-        return fnr.equals(innloggetIdent);
+    private boolean sporInnloggetBrukerOmSegSelv(String innloggetFnr, String fnr) {
+        return fnr.equals(innloggetFnr);
     }
 }

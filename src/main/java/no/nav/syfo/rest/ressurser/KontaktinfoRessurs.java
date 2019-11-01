@@ -1,49 +1,60 @@
 package no.nav.syfo.rest.ressurser;
 
-import io.swagger.annotations.Api;
-import no.nav.metrics.aspects.Count;
+import no.nav.security.oidc.context.OIDCRequestContextHolder;
+import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
+import no.nav.syfo.metric.Metrikk;
 import no.nav.syfo.rest.domain.RSKontaktinfo;
-import no.nav.syfo.services.AktoerService;
-import no.nav.syfo.services.DkifService;
-import no.nav.syfo.services.TilgangskontrollService;
+import no.nav.syfo.services.*;
 import org.slf4j.Logger;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.ForbiddenException;
 
-import static java.lang.System.getProperty;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static no.nav.common.auth.SubjectHandler.getIdent;
+import static no.nav.syfo.oidc.OIDCIssuer.EKSTERN;
+import static no.nav.syfo.utils.OIDCUtil.getSubjectEkstern;
 import static org.slf4j.LoggerFactory.getLogger;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@Controller
-@Path("/kontaktinfo/{fnr}")
-@Consumes(APPLICATION_JSON)
-@Produces(APPLICATION_JSON)
-@Api(value = "kontaktinfo", description = "Endepunkt for å sjekke om en gitt aktoer er reservert i KRR")
+@RestController
+@ProtectedWithClaims(issuer = EKSTERN)
+@RequestMapping(value = "/api/kontaktinfo/{fnr}")
 public class KontaktinfoRessurs {
-    private static final Logger LOG = getLogger(KontaktinfoRessurs.class);
+
+    private static final Logger log = getLogger(KontaktinfoRessurs.class);
+
+    private final Metrikk metrikk;
+    private final OIDCRequestContextHolder contextHolder;
+    private final DkifService dkifService;
+    private final AktoerService aktoerService;
+    private final TilgangskontrollService tilgangskontrollService;
 
     @Inject
-    private DkifService dkifService;
-    @Inject
-    private AktoerService aktoerService;
-    @Inject
-    private TilgangskontrollService tilgangskontrollService;
+    public KontaktinfoRessurs(
+            Metrikk metrikk,
+            OIDCRequestContextHolder contextHolder,
+            DkifService dkifService,
+            AktoerService aktoerService,
+            TilgangskontrollService tilgangskontrollService
+    ) {
+        this.metrikk = metrikk;
+        this.contextHolder = contextHolder;
+        this.dkifService = dkifService;
+        this.aktoerService = aktoerService;
+        this.tilgangskontrollService = tilgangskontrollService;
+    }
 
-    @GET
-    @Count(name = "hentKontaktinfo")
-    public RSKontaktinfo hentKontaktinfo(@PathParam("fnr") String oppslaattFnr) {
-        if ("true".equals(getProperty("local.mock"))) {
-            return new RSKontaktinfo().epost("test@epost.no").tlf("22225555").skalHaVarsel(true);
-        }
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    public RSKontaktinfo hentKontaktinfo(@PathVariable("fnr") final String oppslaattFnr) {
+        metrikk.tellEndepunktKall("hentKontaktinfo");
+
+        String innloggetFnr = getSubjectEkstern(contextHolder);
+
         String oppslaattAktoerId = aktoerService.hentAktoerIdForFnr(oppslaattFnr);
-        if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(oppslaattAktoerId)) {
-            LOG.error("{} spurte om fnr {}. Dette får man ikke lov til fordi det er hverken seg selv eller en av sine ansatte.", getIdent(), oppslaattAktoerId);
+        if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(innloggetFnr, oppslaattAktoerId)) {
+            log.error("Innlogget person spurtee om fnr man ikke lov til fordi det er hverken seg selv eller en av sine ansatte.");
             throw new ForbiddenException();
         }
         return dkifService.hentRSKontaktinfoAktoerId(oppslaattAktoerId);
     }
-
 }

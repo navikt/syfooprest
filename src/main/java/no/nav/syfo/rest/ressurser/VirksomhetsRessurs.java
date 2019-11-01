@@ -1,36 +1,39 @@
 package no.nav.syfo.rest.ressurser;
 
-import io.swagger.annotations.Api;
-import no.nav.metrics.aspects.Count;
+import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
+import no.nav.syfo.metric.Metrikk;
 import no.nav.syfo.rest.domain.RSVirksomhet;
 import no.nav.syfo.services.OrganisasjonService;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
 
-import static java.lang.System.getProperty;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static no.nav.syfo.oidc.OIDCIssuer.EKSTERN;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@Controller
-@Path("/virksomhet/{virksomhetsnummer}")
-@Consumes(APPLICATION_JSON)
-@Produces(APPLICATION_JSON)
-@Api(value = "virksomhet", description = "Endepunkt for å sjekke om en gitt aktoer har tilgang til Oppfølgingsdialog-tjenesten")
+@RestController
+@ProtectedWithClaims(issuer = EKSTERN)
+@RequestMapping(value = "/api/virksomhet/{virksomhetsnummer}")
 public class VirksomhetsRessurs {
 
-    @Inject
-    private OrganisasjonService organisasjonService;
+    private final Metrikk metrikk;
+    private final OrganisasjonService organisasjonService;
 
-    @GET
-    @Count(name = "hentVirksomhet")
-    public RSVirksomhet hentVirksomhet(@PathParam("virksomhetsnummer") String virksomhetsnummer) {
-        if ("true".equals(getProperty("local.mock"))) {
-            return new RSVirksomhet().virksomhetsnummer(virksomhetsnummer).navn("NAV AS");
-        }
+    @Inject
+    public VirksomhetsRessurs(
+            Metrikk metrikk,
+            OrganisasjonService organisasjonService
+    ) {
+        this.metrikk = metrikk;
+        this.organisasjonService = organisasjonService;
+    }
+
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    public RSVirksomhet hentVirksomhet(@PathVariable("virksomhetsnummer") String virksomhetsnummer) {
+        metrikk.tellEndepunktKall("hentVirksomhet");
+
         return new RSVirksomhet()
                 .virksomhetsnummer(virksomhetsnummer)
                 .navn(organisasjonService.hentNavn(virksomhetsnummer));
     }
-
 }

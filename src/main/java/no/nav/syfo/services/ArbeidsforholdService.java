@@ -2,15 +2,12 @@ package no.nav.syfo.services;
 
 import no.nav.syfo.rest.domain.RSStilling;
 import no.nav.syfo.rest.feil.SyfoException;
-import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3;
-import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.FinnArbeidsforholdPrArbeidstakerSikkerhetsbegrensning;
-import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.FinnArbeidsforholdPrArbeidstakerUgyldigInput;
-import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.NorskIdent;
-import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Organisasjon;
-import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Regelverker;
+import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.*;
+import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.*;
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.FinnArbeidsforholdPrArbeidstakerRequest;
 import org.slf4j.Logger;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -21,10 +18,10 @@ import java.util.Collection;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static no.nav.common.auth.SubjectHandler.getIdent;
 import static no.nav.syfo.rest.feil.Feilmelding.Feil.*;
 import static org.slf4j.LoggerFactory.getLogger;
 
+@Service
 public class ArbeidsforholdService {
     private static final Logger LOG = getLogger(ArbeidsforholdService.class);
     private static final Regelverker A_ORDNINGEN = new Regelverker();
@@ -33,13 +30,17 @@ public class ArbeidsforholdService {
         A_ORDNINGEN.setValue("A_ORDNINGEN");
     }
 
-    @Inject
-    private ArbeidsforholdV3 arbeidsforholdV3;
+    private final ArbeidsforholdV3 arbeidsforholdV3;
 
-    @Cacheable(value = "arbeidsforhold", keyGenerator = "userkeygenerator")
+    @Inject
+    public ArbeidsforholdService(ArbeidsforholdV3 arbeidsforholdV3) {
+        this.arbeidsforholdV3 = arbeidsforholdV3;
+    }
+
+    @Cacheable(cacheNames = "arbeidsforholdByFnrAndVirksomhet", key = "#fnr.concat(#virksomhetsnummer)", condition = "#fnr != null && #virksomhetsnummer != null")
     public List<RSStilling> hentBrukersArbeidsforholdHosVirksomhet(String fnr, String virksomhetsnummer, String fom) {
         if (!fnr.matches("\\d{11}$") || !virksomhetsnummer.matches("\\d{9}$")) {
-            LOG.error("{} prøvde å arbeidsforhold for bruker {} i virksomhet {}", getIdent(), fnr, virksomhetsnummer);
+            LOG.error("Prøvde å arbeidsforhold for bruker {} i virksomhet {}", fnr, virksomhetsnummer);
             throw new RuntimeException();
         }
         try {

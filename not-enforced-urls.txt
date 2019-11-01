@@ -1,2 +1,0 @@
-https://${DomainName}/restoppfoelgingsdialog/*
-https://${DomainName}/restoppfoelgingsdialog

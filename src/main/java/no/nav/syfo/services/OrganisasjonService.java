@@ -1,31 +1,35 @@
 package no.nav.syfo.services;
 
-import no.nav.tjeneste.virksomhet.organisasjon.v4.HentOrganisasjonOrganisasjonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.organisasjon.v4.HentOrganisasjonUgyldigInput;
-import no.nav.tjeneste.virksomhet.organisasjon.v4.OrganisasjonV4;
+import no.nav.tjeneste.virksomhet.organisasjon.v4.*;
 import no.nav.tjeneste.virksomhet.organisasjon.v4.informasjon.WSUstrukturertNavn;
 import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.WSHentOrganisasjonRequest;
 import no.nav.tjeneste.virksomhet.organisasjon.v4.meldinger.WSHentOrganisasjonResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 
 import static java.util.stream.Collectors.joining;
-import static no.nav.common.auth.SubjectHandler.getIdent;
 import static org.slf4j.LoggerFactory.getLogger;
 
+@Service
 public class OrganisasjonService {
-    private static final Logger LOG = getLogger(OrganisasjonService.class);
+
+    private static final Logger log = getLogger(OrganisasjonService.class);
+
+    private final OrganisasjonV4 organisasjonV4;
 
     @Inject
-    private OrganisasjonV4 organisasjonV4;
+    public OrganisasjonService(OrganisasjonV4 organisasjonV4) {
+        this.organisasjonV4 = organisasjonV4;
+    }
 
-    @Cacheable("organisasjon")
+    @Cacheable(cacheNames = "virksomhetsnavnByNr", key = "#orgnr", condition = "#orgnr != null")
     public String hentNavn(String orgnr) {
         if (!orgnr.matches("\\d{9}$")) {
-            LOG.error("{} prøvde å hente orgnavn med orgnr {}", getIdent(), orgnr);
+            log.error("Prøvde å hente orgnavn med orgnr {}", orgnr);
             throw new RuntimeException();
         }
         try {
@@ -37,11 +41,11 @@ public class OrganisasjonService {
                     .collect(joining(", "));
 
         } catch (HentOrganisasjonOrganisasjonIkkeFunnet e) {
-            LOG.warn("Kunne ikke hente organisasjon for {}", orgnr, e);
+            log.warn("Kunne ikke hente organisasjon for {}", orgnr, e);
         } catch (HentOrganisasjonUgyldigInput e) {
-            LOG.warn("Ugyldig input for {}", orgnr, e);
+            log.warn("Ugyldig input for {}", orgnr, e);
         } catch (RuntimeException e) {
-            LOG.error("{} fikk en runtimefeil mot organisasjon med orgnr {}", getIdent(), orgnr);
+            log.error("Fikk en runtimefeil mot organisasjon med orgnr {}", orgnr);
         }
         return "Fant ikke navn";
     }

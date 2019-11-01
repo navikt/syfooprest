@@ -8,8 +8,8 @@ import no.nav.tjeneste.virksomhet.sykefravaersoppfoelging.v1.informasjon.WSNaerm
 
 import java.util.function.Function;
 
-import static no.nav.sbl.java8utils.MapUtil.map;
 import static no.nav.syfo.services.AktoerService.aktoerService;
+import static no.nav.syfo.utils.MapUtil.map;
 
 public class WSNaermesteLederMapper {
 

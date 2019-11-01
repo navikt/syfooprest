@@ -1,48 +1,62 @@
 package no.nav.syfo.rest.ressurser;
 
-import io.swagger.annotations.Api;
-import no.nav.metrics.aspects.Count;
+import no.nav.security.oidc.context.OIDCRequestContextHolder;
+import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
+import no.nav.syfo.metric.Metrikk;
 import no.nav.syfo.rest.domain.RSStilling;
-import no.nav.syfo.services.AktoerService;
-import no.nav.syfo.services.ArbeidsforholdService;
-import no.nav.syfo.services.TilgangskontrollService;
+import no.nav.syfo.services.*;
 import org.slf4j.Logger;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.ForbiddenException;
 import java.util.List;
 
-import static java.lang.System.getProperty;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static no.nav.common.auth.SubjectHandler.getIdent;
-import static no.nav.syfo.rest.ressurser.mocks.ArbeidsforholdMock.arbeidsforhold;
+import static no.nav.syfo.oidc.OIDCIssuer.EKSTERN;
+import static no.nav.syfo.utils.OIDCUtil.getSubjectEkstern;
 import static org.slf4j.LoggerFactory.getLogger;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@Controller
-@Path("/arbeidsforhold")
-@Consumes(APPLICATION_JSON)
-@Produces(APPLICATION_JSON)
-@Api(value = "arbeidsforhold", description = "Endepunkt for henting av arbeidsforhold for sykmeldte")
+@RestController
+@ProtectedWithClaims(issuer = EKSTERN)
+@RequestMapping(value = "/api/arbeidsforhold")
 public class ArbeidsforholdRessurs {
-    private static final Logger LOG = getLogger(ArbeidsforholdRessurs.class);
+
+    private static final Logger log = getLogger(ArbeidsforholdRessurs.class);
+
+    private final Metrikk metrikk;
+    private final OIDCRequestContextHolder contextHolder;
+    private final ArbeidsforholdService arbeidsforholdService;
+    private final TilgangskontrollService tilgangskontrollService;
+    private final AktoerService aktoerService;
 
     @Inject
-    private ArbeidsforholdService arbeidsforholdService;
-    @Inject
-    private TilgangskontrollService tilgangskontrollService;
-    @Inject
-    private AktoerService aktoerService;
+    public ArbeidsforholdRessurs(
+            Metrikk metrikk,
+            OIDCRequestContextHolder contextHolder,
+            ArbeidsforholdService arbeidsforholdService,
+            TilgangskontrollService tilgangskontrollService,
+            AktoerService aktoerService
+    ) {
+        this.metrikk = metrikk;
+        this.contextHolder = contextHolder;
+        this.arbeidsforholdService = arbeidsforholdService;
+        this.tilgangskontrollService = tilgangskontrollService;
+        this.aktoerService = aktoerService;
+    }
 
-    @GET
-    @Count(name = "hentArbeidsforhold")
-    public List<RSStilling> hentArbeidsforhold(@QueryParam("fnr") String oppslaattFnr, @QueryParam("virksomhetsnummer") String virksomhetsnummer, @QueryParam("fom") String fom) {
-        if ("true".equals(getProperty("local.mock"))) {
-            return arbeidsforhold();
-        }
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    public List<RSStilling> hentArbeidsforhold(
+            @RequestParam("fnr") String oppslaattFnr,
+            @RequestParam("virksomhetsnummer") String virksomhetsnummer,
+            @RequestParam("fom") String fom
+    ) {
+        metrikk.tellEndepunktKall("hentArbeidsforhold");
 
-        if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(aktoerService.hentAktoerIdForFnr(oppslaattFnr))) {
-            LOG.error("{} spurte om fnr {}. Dette får man ikke lov til fordi det er hverken seg selv eller en av sine ansatte.", getIdent(), oppslaattFnr);
+        String innloggetFnr = getSubjectEkstern(contextHolder);
+
+        if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(innloggetFnr, aktoerService.hentAktoerIdForFnr(oppslaattFnr))) {
+            log.error("Innlogget person spurtee om fnr man ikke lov til fordi det er hverken seg selv eller en av sine ansatte.");
             throw new ForbiddenException();
         }
 

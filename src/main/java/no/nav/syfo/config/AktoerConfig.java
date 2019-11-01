@@ -1,52 +1,66 @@
 package no.nav.syfo.config;
 
-
-import no.nav.sbl.dialogarena.common.cxf.CXFClient;
-import no.nav.sbl.dialogarena.types.Pingable;
-import no.nav.syfo.mock.AktoerMock;
+import no.nav.syfo.services.ws.LogErrorHandler;
+import no.nav.syfo.services.ws.STSClientConfig;
 import no.nav.tjeneste.virksomhet.aktoer.v2.AktoerV2;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.apache.cxf.endpoint.Client;
+import org.apache.cxf.feature.LoggingFeature;
+import org.apache.cxf.frontend.ClientProxy;
+import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.apache.cxf.message.Message;
+import org.apache.cxf.phase.PhaseInterceptor;
+import org.apache.cxf.ws.addressing.WSAddressingFeature;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.*;
 
-import static java.lang.System.getProperty;
-import static no.nav.sbl.dialogarena.common.cxf.InstanceSwitcher.createMetricsProxyWithInstanceSwitcher;
-import static no.nav.sbl.dialogarena.types.Pingable.Ping.feilet;
-import static no.nav.sbl.dialogarena.types.Pingable.Ping.lyktes;
+import javax.xml.namespace.QName;
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.handler.Handler;
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.Collections.singletonList;
 
 @Configuration
 public class AktoerConfig {
 
+    private static final String AKTOER_V_2_WSDL = "classpath:wsdl/no/nav/tjeneste/virksomhet/aktoer/v2/Binding.wsdl";
+    private static final String AKTOER_V_2_NAMESPACE = "http://nav.no/tjeneste/virksomhet/aktoer/v2/Binding/";
+    private static final QName AKTOER_V_2_SERVICE = new QName(AKTOER_V_2_NAMESPACE, "Aktoer");
+    private static final QName AKTOER_V_2_PORT = new QName(AKTOER_V_2_NAMESPACE, "Aktoer_v2Port");
+
     public static final String MOCK_KEY = "aktoer.withmock";
-    public static final String ENDEPUNKT_URL_KEY = "AKTOER_V2_ENDPOINTURL";
-    private static final String ENDEPUNKT_URL = getProperty(ENDEPUNKT_URL_KEY);
-    private static final String ENDEPUNKT_NAVN = "AKTOER_V2";
-    private static final boolean KRITISK = true;
+    @Value("${servicegateway.url}")
+    private String serviceUrl;
 
     @Bean
+    @ConditionalOnProperty(value = MOCK_KEY, havingValue = "false", matchIfMissing = true)
+    @Primary
     public AktoerV2 aktoerV2() {
-        AktoerV2 prod =  factory().configureStsForExternalSSO().build();
-        AktoerV2 mock =  new AktoerMock();
-        return createMetricsProxyWithInstanceSwitcher(ENDEPUNKT_NAVN, prod, mock, MOCK_KEY, AktoerV2.class);
+        AktoerV2 port = factory();
+        STSClientConfig.configureRequestSamlToken(port);
+        return port;
     }
 
-    @Bean
-    public Pingable aktoerPing() {
-        Pingable.Ping.PingMetadata pingMetadata = new Pingable.Ping.PingMetadata(ENDEPUNKT_URL, ENDEPUNKT_NAVN, KRITISK);
-        final AktoerV2 aktoerPing = factory()
-                .configureStsForSystemUser()
-                .build();
-        return () -> {
-            try {
-                aktoerPing.ping();
-                return lyktes(pingMetadata);
-            } catch (Exception e) {
-                return feilet(pingMetadata, e);
-            }
-        };
+    @SuppressWarnings("unchecked")
+    private AktoerV2 factory() {
+        return getPort(singletonList(new LogErrorHandler()));
     }
 
-    private CXFClient<AktoerV2> factory() {
-        return new CXFClient<>(AktoerV2.class)
-                .address(ENDEPUNKT_URL);
+    AktoerV2 getPort(List<Handler> handlers, PhaseInterceptor<? extends Message>... interceptors) {
+        JaxWsProxyFactoryBean factoryBean = new JaxWsProxyFactoryBean();
+        factoryBean.setWsdlURL(AKTOER_V_2_WSDL);
+        factoryBean.setServiceName(AKTOER_V_2_SERVICE);
+        factoryBean.setEndpointName(AKTOER_V_2_PORT);
+        factoryBean.setServiceClass(AktoerV2.class);
+        factoryBean.setAddress(serviceUrl + "aktoerregister/ws/Aktoer/v2");
+        factoryBean.getFeatures().add(new WSAddressingFeature());
+        factoryBean.getFeatures().add(new LoggingFeature());
+        AktoerV2 port = (AktoerV2) factoryBean.create();
+        ((BindingProvider) port).getBinding().setHandlerChain(handlers);
+        Client client = ClientProxy.getClient(port);
+        Arrays.stream(interceptors).forEach(client.getOutInterceptors()::add);
+        return factoryBean.create(AktoerV2.class);
     }
 }
