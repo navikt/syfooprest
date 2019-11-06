@@ -1,36 +1,41 @@
 package no.nav.syfo.services;
 
 import no.nav.syfo.rest.domain.RSKontaktinfo;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.DigitalKontaktinformasjonV1;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.HentDigitalKontaktinformasjonKontaktinformasjonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.HentDigitalKontaktinformasjonPersonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.HentDigitalKontaktinformasjonSikkerhetsbegrensing;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.WSEpostadresse;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.WSKontaktinformasjon;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.WSMobiltelefonnummer;
+import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.*;
+import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.*;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.WSHentDigitalKontaktinformasjonRequest;
 import org.slf4j.Logger;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.time.OffsetDateTime;
 
 import static java.util.Optional.ofNullable;
-import static no.nav.common.auth.SubjectHandler.getIdent;
 import static no.nav.syfo.rest.domain.RSKontaktinfo.FeilAarsak.*;
 import static org.slf4j.LoggerFactory.getLogger;
 
+@Service
 public class DkifService {
-    private static final Logger LOG = getLogger(DkifService.class);
-    @Inject
-    private DigitalKontaktinformasjonV1 dkifV1;
-    @Inject
-    private AktoerService aktoerService;
 
-    @Cacheable(value = "dkif", keyGenerator = "userkeygenerator")
+    private static final Logger log = getLogger(DkifService.class);
+
+    private final DigitalKontaktinformasjonV1 dkifV1;
+    private final AktoerService aktoerService;
+
+    @Inject
+    public DkifService(
+            DigitalKontaktinformasjonV1 dkifV1,
+            AktoerService aktoerService
+    ) {
+        this.dkifV1 = dkifV1;
+        this.aktoerService = aktoerService;
+    }
+
+    @Cacheable(cacheNames = "kontaktinfoByFnr", key = "#fnr", condition = "#fnr != null")
     public RSKontaktinfo hentRSKontaktinfoFnr(String fnr) {
         if (!fnr.matches("\\d{11}$")) {
-            LOG.error("{} prøvde å hente kontaktinfo med fnr {}", getIdent(), fnr);
+            log.error("Prøvde å hente kontaktinfo med fnr {}", fnr);
             throw new RuntimeException();
         }
 
@@ -56,7 +61,7 @@ public class DkifService {
         } catch (HentDigitalKontaktinformasjonPersonIkkeFunnet e) {
             return new RSKontaktinfo().fnr(fnr).skalHaVarsel(false).feilAarsak(PERSON_IKKE_FUNNET);
         } catch (RuntimeException e) {
-            LOG.error("{} fikk en runtimefeil mot DKIF med fnr {}", getIdent(), fnr, e);
+            log.error("Fikk en runtimefeil mot DKIF med fnr {}", fnr, e);
             throw e;
         }
     }
@@ -79,7 +84,7 @@ public class DkifService {
                 .isPresent();
     }
 
-    @Cacheable(value = "dkif", keyGenerator = "userkeygenerator")
+    @Cacheable(cacheNames = "kontaktinfoByAktorId", key = "#aktoerId", condition = "#aktoerId != null")
     public RSKontaktinfo hentRSKontaktinfoAktoerId(String aktoerId) {
         return hentRSKontaktinfoFnr(aktoerService.hentFnrForAktoer(aktoerId));
     }

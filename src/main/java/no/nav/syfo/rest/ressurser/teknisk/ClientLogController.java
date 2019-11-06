@@ -1,18 +1,16 @@
 package no.nav.syfo.rest.ressurser.teknisk;
 
+import no.nav.syfo.metric.Metrikk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.inject.Inject;
 
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static no.nav.metrics.MetricsFactory.createEvent;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@Path("/logging")
-@Controller
+@RestController
+@RequestMapping("/logging")
 public class ClientLogController {
     private final Logger logger = LoggerFactory.getLogger("frontendlog");
 
@@ -20,8 +18,16 @@ public class ClientLogController {
     private static final int maxLogPerSec = 10;
     private static final int minWaitTime = 1000 / maxLogPerSec;
 
-    @POST
-    @Consumes(APPLICATION_JSON)
+    private final Metrikk metrikk;
+
+    @Inject
+    public ClientLogController(
+            Metrikk metrikk
+    ) {
+        this.metrikk = metrikk;
+    }
+
+    @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public void log(LogLinje logLinje) {
         // Throttling calls to log
         long currentTime = System.currentTimeMillis();
@@ -32,7 +38,7 @@ public class ClientLogController {
         }
 
         if (logLinje.url.contains("oppfolgingsplaner")) {
-            createEvent("oppfolgingsplaner-frontendfeil").report();
+            metrikk.countEvent("oppfolgingsplaner-frontendfeil");
         }
 
         switch (logLinje.level) {
@@ -40,7 +46,7 @@ public class ClientLogController {
                 logger.info(logLinje.toString());
                 break;
             case "ERROR":
-                createEvent("frontendlog-error").report();
+                metrikk.countEvent("frontendlog-error");
             case "WARN":
                 logger.warn(logLinje.toString());
                 break;

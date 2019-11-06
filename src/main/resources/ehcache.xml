@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+    <defaultCache eternal="true" maxElementsInMemory="1000" overflowToDisk="false"/>
+    <cache name="aktorByAktorId" maxElementsInMemory="10000" overflowToDisk="false" eternal="false" timeToLiveSeconds="43200" />
+    <cache name="aktorByFnr" maxElementsInMemory="10000" overflowToDisk="false" eternal="false" timeToLiveSeconds="43200" />
+    <cache name="arbeidsforholdByFnrAndVirksomhet" maxElementsInMemory="10000" overflowToDisk="false" eternal="false" timeToLiveSeconds="43200" />
+    <cache name="kontaktinfoByAktorId" maxElementsInMemory="10000" overflowToDisk="false" eternal="false" timeToLiveSeconds="43200" />
+    <cache name="kontaktinfoByFnr" maxElementsInMemory="10000" overflowToDisk="false" eternal="false" timeToLiveSeconds="43200" />
+    <cache name="navnByFnr" maxElementsInMemory="10000" overflowToDisk="false" eternal="false" timeToLiveSeconds="43200" />
+    <cache name="virksomhetsnavnByNr" maxElementsInMemory="10000" overflowToDisk="false" eternal="false" timeToLiveSeconds="43200" />
+    <cache name="ansatteByAktorId" maxElementsInMemory="10000" overflowToDisk="false" eternal="false" timeToLiveSeconds="43200" />
+    <cache name="forrigeLederByAktorIdAndVirksomhet" maxElementsInMemory="10000" overflowToDisk="false" eternal="false" timeToLiveSeconds="43200" />
+    <cache name="ledereByAktorId" maxElementsInMemory="10000" overflowToDisk="false" eternal="false" timeToLiveSeconds="43200" />
+    <cache name="lederByAktorIdAndVirksomhet" maxElementsInMemory="10000" overflowToDisk="false" eternal="false" timeToLiveSeconds="43200" />
+</ehcache>

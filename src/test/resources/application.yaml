@@ -1,0 +1,49 @@
+spring:
+  profiles.active: local
+  cache:
+    type: none
+server:
+  port: 8580
+  servlet:
+    context-path: /syfooprest
+
+srvrestoppfoelgingsdialog:
+  username: "username"
+  password: "1234"
+
+securitytokenservice.url: "sts.url"
+
+elector.path: "www.kanskje.no"
+
+no.nav.security.oidc:
+  issuers: selvbetjening
+  issuer:
+    selvbetjening:
+      discoveryurl: http://metadata
+      accepted_audience: aud-localhost
+      cookie_name: localhost-idtoken
+
+aktoer.v2.endpointurl: "aktoerv2.url"
+sykefravaersoppfoelging.v1.endpointurl: "sykefravaeroppfoelgingv1.url"
+virksomhet:
+  arbeidsforhold.v3.endpointurl: "arbeidsforhold.url"
+  brukerprofil.v3.endpointurl: "brukerprofil.url"
+  digitalkontakinformasjon.v1.endpointurl: "dkif.url"
+  organisasjon.v4.endpointurl: "organisasjonv4.url"
+
+nais.cluster.name: 'local'
+environment.name: 'dev'
+fasit.environment.name: 'local'
+
+aktoer.withmock: true
+arbeidsforhold.aareg.withmock: true
+brukerprofilv3.withmock: true
+dkif.withmock: true
+ereg.withmock: true
+sykefravaersoppfoelgingv1.withmock: true
+
+tilgangskontrollapi.url: "https://www.ikke.no"
+
+tjenester.url: https://tjenester-q.nav.no
+
+servicegateway.url: https://servicegateway

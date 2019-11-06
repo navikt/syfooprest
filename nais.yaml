@@ -1,7 +1,5 @@
-# ref https://raw.githubusercontent.com/nais/naisd/master/nais_example.yaml
-image: docker.adeo.no:5000/digisyfo/restoppfoelgingsdialog
+image: "repo.adeo.no:5443/syfooprest"
 team: teamsykefravr
-webproxy: true
 replicas:
   min: 1
   max: 2
@@ -9,18 +7,18 @@ replicas:
 port: 8080
 healthcheck:
   liveness:
-    path: restoppfoelgingsdialog/internal/isAlive
+    path: /syfooprest/internal/isAlive
     initialDelay: 120
     timeout: 1
     periodSeconds: 10
     failureThreshold: 3
   readiness:
-    path: restoppfoelgingsdialog/internal/isAlive
+    path: /syfooprest/internal/isAlive
     initialDelay: 120
     timeout: 1
 prometheus:
   enabled: true
-  path: restoppfoelgingsdialog/internal/metrics
+  path: /syfooprest/internal/prometheus
 resources:
   limits:
     cpu: 3000m
@@ -58,7 +56,16 @@ fasitResources:
     resourceType: webserviceendpoint
   - alias: oppfoelgingsdialog.properties
     resourceType: applicationProperties
+    # OIDC med AzureAD B2C
+  - alias: aad_b2c_clientid
+    resourceType: credential
+    propertyMap:
+      username: NO_NAV_SECURITY_OIDC_ISSUER_SELVBETJENING_ACCEPTEDAUDIENCE
+  - alias: aad_b2c_discovery
+    resourceType: baseurl
+    propertyMap:
+      url: NO_NAV_SECURITY_OIDC_ISSUER_SELVBETJENING_DISCOVERYURL
   exposed:
   - alias: oppfoelgingsdialogapi
     resourceType: restservice
-    path: /restoppfoelgingsdialog/api
+    path: /syfooprest/api

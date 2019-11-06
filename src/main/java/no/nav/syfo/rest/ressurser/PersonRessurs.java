@@ -1,50 +1,60 @@
 package no.nav.syfo.rest.ressurser;
 
-import io.swagger.annotations.Api;
-import no.nav.metrics.aspects.Count;
+import no.nav.security.oidc.context.OIDCRequestContextHolder;
+import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
+import no.nav.syfo.metric.Metrikk;
 import no.nav.syfo.rest.domain.RSPerson;
-import no.nav.syfo.services.AktoerService;
-import no.nav.syfo.services.BrukerprofilService;
-import no.nav.syfo.services.TilgangskontrollService;
+import no.nav.syfo.services.*;
 import org.slf4j.Logger;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.ForbiddenException;
 
-import static java.lang.System.getProperty;
-import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static no.nav.common.auth.SubjectHandler.getIdent;
+import static no.nav.syfo.oidc.OIDCIssuer.EKSTERN;
+import static no.nav.syfo.utils.OIDCUtil.getSubjectEkstern;
 import static org.slf4j.LoggerFactory.getLogger;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@Controller
-@Path("/person/{fnr}")
-@Consumes(APPLICATION_JSON)
-@Produces(APPLICATION_JSON)
-@Api(value = "person", description = "Endepunkt for å hente navn for en gitt aktoerId")
+@RestController
+@ProtectedWithClaims(issuer = EKSTERN)
+@RequestMapping(value = "/api/person/{fnr}")
 public class PersonRessurs {
-    private static final Logger LOG = getLogger(PersonRessurs.class);
+    private static final Logger log = getLogger(PersonRessurs.class);
+
+    private final Metrikk metrikk;
+    private final OIDCRequestContextHolder contextHolder;
+    private final BrukerprofilService brukerprofilService;
+    private final TilgangskontrollService tilgangskontrollService;
+    private final AktoerService aktoerService;
 
     @Inject
-    private BrukerprofilService brukerprofilService;
-    @Inject
-    private TilgangskontrollService tilgangskontrollService;
-    @Inject
-    private AktoerService aktoerService;
+    public PersonRessurs(
+            Metrikk metrikk,
+            OIDCRequestContextHolder contextHolder,
+            BrukerprofilService brukerprofilService,
+            TilgangskontrollService tilgangskontrollService,
+            AktoerService aktoerService
+    ) {
+        this.metrikk = metrikk;
+        this.contextHolder = contextHolder;
+        this.brukerprofilService = brukerprofilService;
+        this.tilgangskontrollService = tilgangskontrollService;
+        this.aktoerService = aktoerService;
+    }
 
-    @GET
-    @Count(name = "hentPerson")
-    public RSPerson hentNavn(@PathParam("fnr") String fnr) {
-        if ("true".equals(getProperty("local.mock"))) {
-            return new RSPerson().fnr(fnr).navn("Sygve Sykmeldt");
-        }
-        if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatteEllerLedere(aktoerService.hentAktoerIdForFnr(fnr))) {
-            LOG.warn("{} spurte om fnr {}. Dette får man ikke lov til fordi det er hverken seg selv, en av sine ansatte eller nærmeste ledere", getIdent(), fnr);
+    @GetMapping(produces = APPLICATION_JSON_VALUE)
+    public RSPerson hentNavn(@PathVariable("fnr") String fnr) {
+        metrikk.tellEndepunktKall("hentPerson");
+
+        String innloggetFnr = getSubjectEkstern(contextHolder);
+
+        if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatteEllerLedere(innloggetFnr, aktoerService.hentAktoerIdForFnr(fnr))) {
+            log.error("Innlogget person spurtee om fnr man ikke lov til fordi det er hverken seg selv eller en av sine ansatte.");
             throw new ForbiddenException();
         }
         return new RSPerson()
                 .navn(brukerprofilService.hentNavnByFnr(fnr))
                 .fnr(fnr);
     }
-
 }

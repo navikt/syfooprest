@@ -3,6 +3,8 @@ package no.nav.syfo.mock;
 import no.nav.tjeneste.virksomhet.sykefravaersoppfoelging.v1.*;
 import no.nav.tjeneste.virksomhet.sykefravaersoppfoelging.v1.informasjon.*;
 import no.nav.tjeneste.virksomhet.sykefravaersoppfoelging.v1.meldinger.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,9 +12,11 @@ import java.util.Arrays;
 
 import static java.time.LocalDate.now;
 import static java.util.Arrays.asList;
+import static no.nav.syfo.config.SykefravaersoppfoelgingV1Config.MOCK_KEY;
 
+@Service
+@ConditionalOnProperty(value = MOCK_KEY, havingValue = "true")
 public class OppfolgingMock implements SykefravaersoppfoelgingV1 {
-
 
     @Override
     public WSHentNaermesteLederListeResponse hentNaermesteLederListe(WSHentNaermesteLederListeRequest request) throws HentNaermesteLederListeSikkerhetsbegrensning {

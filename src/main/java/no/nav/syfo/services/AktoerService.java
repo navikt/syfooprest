@@ -1,23 +1,29 @@
 package no.nav.syfo.services;
 
 import no.nav.syfo.rest.feil.SyfoException;
-import no.nav.tjeneste.virksomhet.aktoer.v2.AktoerV2;
-import no.nav.tjeneste.virksomhet.aktoer.v2.HentAktoerIdForIdentPersonIkkeFunnet;
-import no.nav.tjeneste.virksomhet.aktoer.v2.HentIdentForAktoerIdPersonIkkeFunnet;
+import no.nav.tjeneste.virksomhet.aktoer.v2.*;
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.WSHentAktoerIdForIdentRequest;
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.WSHentIdentForAktoerIdRequest;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 
-import static no.nav.common.auth.SubjectHandler.getIdent;
 import static no.nav.syfo.rest.feil.Feilmelding.Feil.AKTOER_IKKE_FUNNET;
 import static org.slf4j.LoggerFactory.getLogger;
 
+@Service
 public class AktoerService implements InitializingBean {
     private static AktoerService instance;
+
+    private final AktoerV2 aktoerV2;
+
+    @Inject
+    public AktoerService(AktoerV2 aktoerV2) {
+        this.aktoerV2 = aktoerV2;
+    }
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -30,13 +36,10 @@ public class AktoerService implements InitializingBean {
 
     private static final Logger LOG = getLogger(AktoerService.class);
 
-    @Inject
-    private AktoerV2 aktoerV2;
-
-    @Cacheable("aktoer")
+    @Cacheable(cacheNames = "aktorByFnr", key = "#fnr", condition = "#fnr != null")
     public String hentAktoerIdForFnr(String fnr) {
         if (!fnr.matches("\\d{11}$")) {
-            LOG.error("{} prøvde å hente navn med fnr {}", getIdent(), fnr);
+            LOG.error("Pprøvde å hente navn med fnr");
             throw new RuntimeException();
         }
         try {
@@ -50,10 +53,10 @@ public class AktoerService implements InitializingBean {
         }
     }
 
-    @Cacheable("aktoer")
+    @Cacheable(cacheNames = "aktorByAktorId", key = "#aktoerId", condition = "#aktoerId != null")
     public String hentFnrForAktoer(String aktoerId) {
         if (!aktoerId.matches("\\d{13}$")) {
-            LOG.error("{} prøvde å hente navn med aktoerId {}", getIdent(), aktoerId);
+            LOG.error("Prøvde å hente navn med aktoerId {}", aktoerId);
             throw new RuntimeException();
         }
         try {
