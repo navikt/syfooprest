@@ -7,12 +7,12 @@ import org.springframework.stereotype.Controller;
 import javax.inject.Inject;
 
 @Controller
-public class Metrikk {
+public class Metric {
 
     private final MeterRegistry registry;
 
     @Inject
-    public Metrikk(MeterRegistry registry) {
+    public Metric(MeterRegistry registry) {
         this.registry = registry;
     }
 
@@ -23,7 +23,7 @@ public class Metrikk {
         ).increment();
     }
 
-    public void tellEndepunktKall(String navn) {
+    public void countEndpointRequest(String navn) {
         registry.counter(
                 addPrefix(navn),
                 Tags.of("type", "info")

@@ -1,6 +1,6 @@
 package no.nav.syfo.rest.ressurser.teknisk;
 
-import no.nav.syfo.metric.Metrikk;
+import no.nav.syfo.metric.Metric;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +18,13 @@ public class ClientLogController {
     private static final int maxLogPerSec = 10;
     private static final int minWaitTime = 1000 / maxLogPerSec;
 
-    private final Metrikk metrikk;
+    private final Metric metric;
 
     @Inject
     public ClientLogController(
-            Metrikk metrikk
+            Metric metric
     ) {
-        this.metrikk = metrikk;
+        this.metric = metric;
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
@@ -38,7 +38,7 @@ public class ClientLogController {
         }
 
         if (logLinje.url.contains("oppfolgingsplaner")) {
-            metrikk.countEvent("oppfolgingsplaner-frontendfeil");
+            metric.countEvent("oppfolgingsplaner-frontendfeil");
         }
 
         switch (logLinje.level) {
@@ -46,7 +46,7 @@ public class ClientLogController {
                 logger.info(logLinje.toString());
                 break;
             case "ERROR":
-                metrikk.countEvent("frontendlog-error");
+                metric.countEvent("frontendlog-error");
             case "WARN":
                 logger.warn(logLinje.toString());
                 break;

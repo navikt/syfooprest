@@ -2,7 +2,7 @@ package no.nav.syfo.rest.ressurser;
 
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
-import no.nav.syfo.metric.Metrikk;
+import no.nav.syfo.metric.Metric;
 import no.nav.syfo.rest.domain.RSPerson;
 import no.nav.syfo.services.*;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class PersonRessurs {
     private static final Logger log = getLogger(PersonRessurs.class);
 
-    private final Metrikk metrikk;
+    private final Metric metric;
     private final OIDCRequestContextHolder contextHolder;
     private final BrukerprofilService brukerprofilService;
     private final TilgangskontrollService tilgangskontrollService;
@@ -30,13 +30,13 @@ public class PersonRessurs {
 
     @Inject
     public PersonRessurs(
-            Metrikk metrikk,
+            Metric metric,
             OIDCRequestContextHolder contextHolder,
             BrukerprofilService brukerprofilService,
             TilgangskontrollService tilgangskontrollService,
             AktoerService aktoerService
     ) {
-        this.metrikk = metrikk;
+        this.metric = metric;
         this.contextHolder = contextHolder;
         this.brukerprofilService = brukerprofilService;
         this.tilgangskontrollService = tilgangskontrollService;
@@ -45,7 +45,7 @@ public class PersonRessurs {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public RSPerson hentNavn(@PathVariable("fnr") String fnr) {
-        metrikk.tellEndepunktKall("hentPerson");
+        metric.countEndpointRequest("hentPerson");
 
         String innloggetFnr = getSubjectEkstern(contextHolder);
 

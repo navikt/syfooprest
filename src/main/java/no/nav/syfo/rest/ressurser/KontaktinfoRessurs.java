@@ -2,7 +2,7 @@ package no.nav.syfo.rest.ressurser;
 
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
-import no.nav.syfo.metric.Metrikk;
+import no.nav.syfo.metric.Metric;
 import no.nav.syfo.rest.domain.RSKontaktinfo;
 import no.nav.syfo.services.*;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class KontaktinfoRessurs {
 
     private static final Logger log = getLogger(KontaktinfoRessurs.class);
 
-    private final Metrikk metrikk;
+    private final Metric metric;
     private final OIDCRequestContextHolder contextHolder;
     private final DkifService dkifService;
     private final AktoerService aktoerService;
@@ -31,13 +31,13 @@ public class KontaktinfoRessurs {
 
     @Inject
     public KontaktinfoRessurs(
-            Metrikk metrikk,
+            Metric metric,
             OIDCRequestContextHolder contextHolder,
             DkifService dkifService,
             AktoerService aktoerService,
             TilgangskontrollService tilgangskontrollService
     ) {
-        this.metrikk = metrikk;
+        this.metric = metric;
         this.contextHolder = contextHolder;
         this.dkifService = dkifService;
         this.aktoerService = aktoerService;
@@ -46,7 +46,7 @@ public class KontaktinfoRessurs {
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public RSKontaktinfo hentKontaktinfo(@PathVariable("fnr") final String oppslaattFnr) {
-        metrikk.tellEndepunktKall("hentKontaktinfo");
+        metric.countEndpointRequest("hentKontaktinfo");
 
         String innloggetFnr = getSubjectEkstern(contextHolder);
 

@@ -2,7 +2,7 @@ package no.nav.syfo.rest.ressurser;
 
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
-import no.nav.syfo.metric.Metrikk;
+import no.nav.syfo.metric.Metric;
 import no.nav.syfo.rest.domain.RSStilling;
 import no.nav.syfo.services.*;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ public class ArbeidsforholdRessurs {
 
     private static final Logger log = getLogger(ArbeidsforholdRessurs.class);
 
-    private final Metrikk metrikk;
+    private final Metric metric;
     private final OIDCRequestContextHolder contextHolder;
     private final ArbeidsforholdService arbeidsforholdService;
     private final TilgangskontrollService tilgangskontrollService;
@@ -32,13 +32,13 @@ public class ArbeidsforholdRessurs {
 
     @Inject
     public ArbeidsforholdRessurs(
-            Metrikk metrikk,
+            Metric metric,
             OIDCRequestContextHolder contextHolder,
             ArbeidsforholdService arbeidsforholdService,
             TilgangskontrollService tilgangskontrollService,
             AktoerService aktoerService
     ) {
-        this.metrikk = metrikk;
+        this.metric = metric;
         this.contextHolder = contextHolder;
         this.arbeidsforholdService = arbeidsforholdService;
         this.tilgangskontrollService = tilgangskontrollService;
@@ -51,7 +51,7 @@ public class ArbeidsforholdRessurs {
             @RequestParam("virksomhetsnummer") String virksomhetsnummer,
             @RequestParam("fom") String fom
     ) {
-        metrikk.tellEndepunktKall("hentArbeidsforhold");
+        metric.countEndpointRequest("hentArbeidsforhold");
 
         String innloggetFnr = getSubjectEkstern(contextHolder);
 

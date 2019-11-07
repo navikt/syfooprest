@@ -1,7 +1,7 @@
 package no.nav.syfo.rest.ressurser;
 
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
-import no.nav.syfo.metric.Metrikk;
+import no.nav.syfo.metric.Metric;
 import no.nav.syfo.rest.domain.RSVirksomhet;
 import no.nav.syfo.services.OrganisasjonService;
 import org.springframework.web.bind.annotation.*;
@@ -16,21 +16,21 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(value = "/api/virksomhet/{virksomhetsnummer}")
 public class VirksomhetsRessurs {
 
-    private final Metrikk metrikk;
+    private final Metric metric;
     private final OrganisasjonService organisasjonService;
 
     @Inject
     public VirksomhetsRessurs(
-            Metrikk metrikk,
+            Metric metric,
             OrganisasjonService organisasjonService
     ) {
-        this.metrikk = metrikk;
+        this.metric = metric;
         this.organisasjonService = organisasjonService;
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public RSVirksomhet hentVirksomhet(@PathVariable("virksomhetsnummer") String virksomhetsnummer) {
-        metrikk.tellEndepunktKall("hentVirksomhet");
+        metric.countEndpointRequest("hentVirksomhet");
 
         return new RSVirksomhet()
                 .virksomhetsnummer(virksomhetsnummer)

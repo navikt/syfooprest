@@ -2,7 +2,7 @@ package no.nav.syfo.rest.ressurser;
 
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
-import no.nav.syfo.metric.Metrikk;
+import no.nav.syfo.metric.Metric;
 import no.nav.syfo.rest.domain.RSNaermesteLeder;
 import no.nav.syfo.services.*;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class NaermestelederRessurs {
 
     private static final Logger log = getLogger(NaermestelederRessurs.class);
 
-    private final Metrikk metrikk;
+    private final Metric metric;
     private final OIDCRequestContextHolder contextHolder;
     private final TilgangskontrollService tilgangskontrollService;
     private final AktoerService aktoerService;
@@ -35,13 +35,13 @@ public class NaermestelederRessurs {
 
     @Inject
     public NaermestelederRessurs(
-            Metrikk metrikk,
+            Metric metric,
             OIDCRequestContextHolder contextHolder,
             TilgangskontrollService tilgangskontrollService,
             AktoerService aktoerService,
             NaermesteLederService naermesteLederService
     ) {
-        this.metrikk = metrikk;
+        this.metric = metric;
         this.contextHolder = contextHolder;
         this.tilgangskontrollService = tilgangskontrollService;
         this.aktoerService = aktoerService;
@@ -53,7 +53,7 @@ public class NaermestelederRessurs {
             @PathVariable("fnr") String fnr,
             @RequestParam("virksomhetsnummer") String virksomhetsnummer
     ) {
-        metrikk.tellEndepunktKall("hentNaermesteLeder");
+        metric.countEndpointRequest("hentNaermesteLeder");
 
         String innloggetFnr = getSubjectEkstern(contextHolder);
 
@@ -76,7 +76,7 @@ public class NaermestelederRessurs {
             @PathVariable("fnr") String fnr,
             @RequestParam("virksomhetsnummer") String virksomhetsnummer
     ) {
-        metrikk.tellEndepunktKall("hentForrigeNaermesteLeder");
+        metric.countEndpointRequest("hentForrigeNaermesteLeder");
 
         String innloggetFnr = getSubjectEkstern(contextHolder);
 
