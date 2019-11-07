@@ -30,7 +30,7 @@ public class Metrikk {
         ).increment();
     }
 
-    public void tellHttpKall(int kode) {
+    public void countHttpReponse(int kode) {
         registry.counter(
                 addPrefix("httpstatus"),
                 Tags.of(
