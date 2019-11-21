@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -54,7 +55,7 @@ public class NaermesteLederRessursTest {
         when(aktoerService.hentAktoerIdForFnr(anyString())).thenReturn("1234567890123");
         when(naermesteLederService.hentForrigeNaermesteLeder(any(), any())).thenReturn(Optional.empty());
 
-        Response response = naermestelederRessurs.hentForrigeNaermesteLeder("12345678901", "123456789");
-        assertThat(response.getStatus()).isEqualTo(404);
+        ResponseEntity responseEntity = naermestelederRessurs.hentForrigeNaermesteLeder("12345678901", "123456789");
+        assertThat(responseEntity.getStatusCodeValue()).isEqualTo(404);
     }
 }

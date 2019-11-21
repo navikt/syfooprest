@@ -6,19 +6,21 @@ import no.nav.syfo.metric.Metric;
 import no.nav.syfo.rest.domain.RSNaermesteLeder;
 import no.nav.syfo.services.*;
 import org.slf4j.Logger;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
-import javax.ws.rs.core.Response;
 
-import static javax.ws.rs.core.Response.ok;
-import static javax.ws.rs.core.Response.status;
 import static no.nav.syfo.oidc.OIDCIssuer.EKSTERN;
 import static no.nav.syfo.utils.OIDCUtil.getSubjectEkstern;
 import static org.slf4j.LoggerFactory.getLogger;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.ResponseEntity.ok;
+import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @ProtectedWithClaims(issuer = EKSTERN)
@@ -72,7 +74,7 @@ public class NaermestelederRessurs {
     }
 
     @GetMapping(path = "/forrige", produces = APPLICATION_JSON_VALUE)
-    public Response hentForrigeNaermesteLeder(
+    public ResponseEntity hentForrigeNaermesteLeder(
             @PathVariable("fnr") String fnr,
             @RequestParam("virksomhetsnummer") String virksomhetsnummer
     ) {
@@ -86,8 +88,13 @@ public class NaermestelederRessurs {
         }
 
         return naermesteLederService.hentForrigeNaermesteLeder(aktoerService.hentAktoerIdForFnr(fnr), virksomhetsnummer)
-                .map(forrigeLeder -> ok(forrigeLeder).build())
-                .orElse(status(404).build());
-
+                .map(forrigeLeder -> ok()
+                        .contentType(APPLICATION_JSON)
+                        .body(forrigeLeder)
+                )
+                .orElse(status(HttpStatus.NOT_FOUND)
+                        .contentType(APPLICATION_JSON)
+                        .build()
+                );
     }
 }
