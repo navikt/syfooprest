@@ -32,7 +32,6 @@ Run `LocalApplication.main`. Runs on port 8580.
 
 Run `./gradlew test -i`
 
-
 ## Pipeline
 
 Pipeline in jenkins: https://jenkins-digisyfo.adeo.no/job/digisyfo/job/syfooprest/
