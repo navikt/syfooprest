@@ -1,29 +1,42 @@
 # syfooprest
 
-Syfooprest er et REST-API i SBS tilbyr informasjon knyttet til nærmeste leder og
-applikasjonene i SBS (oppfolgingsplan og oppfolgingsplanarbeidsgiver).
+Syfooprest is REST-API in SBS offering information regarding `Arbeidsgiver` and `Arbeidstaker`
+to the following applications in SBS:
+* oppfolgingsplan (Ditt NAV)
+* oppfolgingsplanarbeidsgiver (Dine Sykmeldte)
 
-Dette er en liste over informasjon som tilbys:
-* Arbeidsforhold
-* Kontaktinfo
-* Navn på person
-* Nærmeste leder
-* Virksomhet
+A list of the exposeddata:
+* `Arbeidsforhold`
+* `Kontaktinfo`
+* `Name of person`
+* `Nærmeste leder`
+* `Virksomhet`
 
-Ekstern fnformasjon hentes med SOAP.
+External data is retrieved with SOAP.
 
-
-## Lokal utvikling
-
-Start opp via `LocalApplication.main`. Kjører på port 8580.
-
-
-## Veien til prod
-
-Bygg ligger i jenkins: https://jenkins-digisyfo.adeo.no/job/digisyfo/job/syfooprest/
-
-
-## Teknologi
+## Technology
 * Java
 * Spring Boot
 * Gradle
+
+## Local Development
+
+#### Build
+Run `./gradlew clean shadowJar`
+
+#### Run Application
+
+Run `LocalApplication.main`. Runs on port 8580.
+
+#### Run tests
+
+Run `./gradlew test -i`
+
+
+## Pipeline
+
+Pipeline in jenkins: https://jenkins-digisyfo.adeo.no/job/digisyfo/job/syfooprest/
+
+#### Deploy
+
+Deploy with Naiserator
