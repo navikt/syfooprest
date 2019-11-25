@@ -24,7 +24,7 @@ External data is retrieved with SOAP.
 #### Build
 Run `./gradlew clean shadowJar`
 
-#### Run Application
+#### Run application
 
 Run `LocalApplication.main`. Runs on port 8580.
 
