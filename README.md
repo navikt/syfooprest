@@ -10,7 +10,6 @@ Dette er en liste over informasjon som tilbys:
 * Nærmeste leder
 * Virksomhet
 
-
 Ekstern fnformasjon hentes med SOAP.
 
 
