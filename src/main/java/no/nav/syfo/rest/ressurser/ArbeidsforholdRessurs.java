@@ -56,7 +56,7 @@ public class ArbeidsforholdRessurs {
         String innloggetFnr = getSubjectEkstern(contextHolder);
 
         if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(innloggetFnr, aktoerService.hentAktoerIdForFnr(oppslaattFnr))) {
-            log.error("Innlogget person spurtee om fnr man ikke lov til fordi det er hverken seg selv eller en av sine ansatte.");
+            log.error("Fikk ikke hentet arbeidsforhold: Innlogget person spurte om fnr man ikke lov til fordi det er hverken seg selv eller en av sine ansatte.");
             throw new ForbiddenException();
         }
 

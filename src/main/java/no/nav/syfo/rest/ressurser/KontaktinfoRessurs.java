@@ -52,7 +52,7 @@ public class KontaktinfoRessurs {
 
         String oppslaattAktoerId = aktoerService.hentAktoerIdForFnr(oppslaattFnr);
         if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(innloggetFnr, oppslaattAktoerId)) {
-            log.error("Innlogget person spurtee om fnr man ikke lov til fordi det er hverken seg selv eller en av sine ansatte.");
+            log.error("Fikk ikke hentet kontaktinfo: Innlogget person spurte om fnr man ikke lov til fordi det er hverken seg selv eller en av sine ansatte.");
             throw new ForbiddenException();
         }
         return dkifService.hentRSKontaktinfoAktoerId(oppslaattAktoerId);

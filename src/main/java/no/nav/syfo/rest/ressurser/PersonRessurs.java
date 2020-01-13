@@ -50,7 +50,7 @@ public class PersonRessurs {
         String innloggetFnr = getSubjectEkstern(contextHolder);
 
         if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatteEllerLedere(innloggetFnr, aktoerService.hentAktoerIdForFnr(fnr))) {
-            log.error("Innlogget person spurtee om fnr man ikke lov til fordi det er hverken seg selv eller en av sine ansatte.");
+            log.error("Fikk ikke hentet navn: Innlogget person spurte om fnr man ikke lov til fordi det er hverken seg selv eller en av sine ansatte.");
             throw new ForbiddenException();
         }
         return new RSPerson()
