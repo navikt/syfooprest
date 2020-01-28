@@ -23,6 +23,7 @@ no.nav.security.oidc:
       accepted_audience: aud-localhost
       cookie_name: localhost-idtoken
 
+syfoapi.url: "http://syfoapi"
 aktoer.v2.endpointurl: "aktoerv2.url"
 sykefravaersoppfoelging.v1.endpointurl: "sykefravaeroppfoelgingv1.url"
 virksomhet:

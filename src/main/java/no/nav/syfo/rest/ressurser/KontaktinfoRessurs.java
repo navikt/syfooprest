@@ -50,11 +50,11 @@ public class KontaktinfoRessurs {
 
         String innloggetFnr = getSubjectEkstern(contextHolder);
 
-        String oppslaattAktoerId = aktoerService.hentAktoerIdForFnr(oppslaattFnr);
-        if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(innloggetFnr, oppslaattAktoerId)) {
+        if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(innloggetFnr, oppslaattFnr)) {
             log.error("Fikk ikke hentet kontaktinfo: Innlogget person spurte om fnr man ikke lov til fordi det er hverken seg selv eller en av sine ansatte.");
             throw new ForbiddenException();
         }
+        String oppslaattAktoerId = aktoerService.hentAktoerIdForFnr(oppslaattFnr);
         return dkifService.hentRSKontaktinfoAktoerId(oppslaattAktoerId);
     }
 }

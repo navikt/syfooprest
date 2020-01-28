@@ -59,7 +59,7 @@ public class NaermestelederRessurs {
 
         String innloggetFnr = getSubjectEkstern(contextHolder);
 
-        if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(innloggetFnr, aktoerService.hentAktoerIdForFnr(fnr))) {
+        if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(innloggetFnr, fnr)) {
             log.error("Fikk ikke hentet narmeste leder: Innlogget person spurte om fnr man ikke lov til fordi det er hverken seg selv eller en av sine ansatte.");
             throw new ForbiddenException();
         }
@@ -82,7 +82,7 @@ public class NaermestelederRessurs {
 
         String innloggetFnr = getSubjectEkstern(contextHolder);
 
-        if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(innloggetFnr, aktoerService.hentAktoerIdForFnr(fnr))) {
+        if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(innloggetFnr, fnr)) {
             log.error("Fikk ikke hentet forrige narmeste leder: Innlogget person spurte om fnr man ikke lov til fordi det er hverken seg selv eller en av sine ansatte.");
             throw new ForbiddenException();
         }
