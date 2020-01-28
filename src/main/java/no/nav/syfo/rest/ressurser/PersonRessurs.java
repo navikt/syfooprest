@@ -4,7 +4,8 @@ import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 import no.nav.syfo.metric.Metric;
 import no.nav.syfo.rest.domain.RSPerson;
-import no.nav.syfo.services.*;
+import no.nav.syfo.services.BrukerprofilService;
+import no.nav.syfo.services.TilgangskontrollService;
 import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,21 +27,18 @@ public class PersonRessurs {
     private final OIDCRequestContextHolder contextHolder;
     private final BrukerprofilService brukerprofilService;
     private final TilgangskontrollService tilgangskontrollService;
-    private final AktoerService aktoerService;
 
     @Inject
     public PersonRessurs(
             Metric metric,
             OIDCRequestContextHolder contextHolder,
             BrukerprofilService brukerprofilService,
-            TilgangskontrollService tilgangskontrollService,
-            AktoerService aktoerService
+            TilgangskontrollService tilgangskontrollService
     ) {
         this.metric = metric;
         this.contextHolder = contextHolder;
         this.brukerprofilService = brukerprofilService;
         this.tilgangskontrollService = tilgangskontrollService;
-        this.aktoerService = aktoerService;
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
@@ -49,7 +47,7 @@ public class PersonRessurs {
 
         String innloggetFnr = getSubjectEkstern(contextHolder);
 
-        if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatteEllerLedere(innloggetFnr, aktoerService.hentAktoerIdForFnr(fnr))) {
+        if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatteEllerLedere(innloggetFnr, fnr)) {
             log.error("Fikk ikke hentet navn: Innlogget person spurte om fnr man ikke lov til fordi det er hverken seg selv eller en av sine ansatte.");
             throw new ForbiddenException();
         }

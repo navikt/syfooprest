@@ -4,7 +4,8 @@ import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 import no.nav.syfo.metric.Metric;
 import no.nav.syfo.rest.domain.RSStilling;
-import no.nav.syfo.services.*;
+import no.nav.syfo.services.ArbeidsforholdService;
+import no.nav.syfo.services.TilgangskontrollService;
 import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,21 +29,18 @@ public class ArbeidsforholdRessurs {
     private final OIDCRequestContextHolder contextHolder;
     private final ArbeidsforholdService arbeidsforholdService;
     private final TilgangskontrollService tilgangskontrollService;
-    private final AktoerService aktoerService;
 
     @Inject
     public ArbeidsforholdRessurs(
             Metric metric,
             OIDCRequestContextHolder contextHolder,
             ArbeidsforholdService arbeidsforholdService,
-            TilgangskontrollService tilgangskontrollService,
-            AktoerService aktoerService
+            TilgangskontrollService tilgangskontrollService
     ) {
         this.metric = metric;
         this.contextHolder = contextHolder;
         this.arbeidsforholdService = arbeidsforholdService;
         this.tilgangskontrollService = tilgangskontrollService;
-        this.aktoerService = aktoerService;
     }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
@@ -55,7 +53,7 @@ public class ArbeidsforholdRessurs {
 
         String innloggetFnr = getSubjectEkstern(contextHolder);
 
-        if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(innloggetFnr, aktoerService.hentAktoerIdForFnr(oppslaattFnr))) {
+        if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(innloggetFnr, oppslaattFnr)) {
             log.error("Fikk ikke hentet arbeidsforhold: Innlogget person spurte om fnr man ikke lov til fordi det er hverken seg selv eller en av sine ansatte.");
             throw new ForbiddenException();
         }
