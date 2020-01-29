@@ -53,7 +53,8 @@ public class NarmesteLederConsumer {
                     }
             );
             if (response.getStatusCode() == HttpStatus.NO_CONTENT) {
-                LOG.warn("Did not Find Naermeste leder for Ansatt");
+                metric.countEvent("call_syfoapi_narmesteleder_nocontent");
+                LOG.warn("Found no Naermeste Leder for Ansatt in Virksomhet");
                 return Optional.empty();
             } else if (response.getStatusCode() != HttpStatus.OK) {
                 metric.countEvent("call_syfoapi_narmesteleder_fail");
