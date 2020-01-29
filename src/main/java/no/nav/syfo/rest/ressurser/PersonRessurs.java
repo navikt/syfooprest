@@ -55,4 +55,22 @@ public class PersonRessurs {
                 .navn(brukerprofilService.hentNavnByFnr(fnr))
                 .fnr(fnr);
     }
+
+    @GetMapping(path = "/{virksomhetsnummer}",produces = APPLICATION_JSON_VALUE)
+    public RSPerson hentNavnMedVirksomhet(
+            @PathVariable("fnr") String fnr,
+            @PathVariable("virksomhetsnummer") String virksomhetsnummer
+    ) {
+        metric.countEndpointRequest("hentNavnMedVirksomhet");
+
+        String innloggetFnr = getSubjectEkstern(contextHolder);
+
+        if (tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatteEllerLedere(innloggetFnr, fnr, virksomhetsnummer)) {
+            log.error("Fikk ikke hentet navn med virksomhet: Innlogget person har ikke tilgang fnr fordi det er hverken seg selv, en av sine ansatte eller sin naermeste leder");
+            throw new ForbiddenException();
+        }
+        return new RSPerson()
+                .navn(brukerprofilService.hentNavnByFnr(fnr))
+                .fnr(fnr);
+    }
 }
