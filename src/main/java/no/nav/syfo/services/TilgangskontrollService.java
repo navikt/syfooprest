@@ -14,30 +14,16 @@ public class TilgangskontrollService {
     private final AktoerService aktoerService;
     private final BrukerTilgangConsumer brukerTilgangConsumer;
     private final NarmesteLederConsumer narmesteLederConsumer;
-    private final NaermesteLederService naermesteLederService;
 
     @Inject
     public TilgangskontrollService(
             AktoerService aktoerService,
             BrukerTilgangConsumer brukerTilgangConsumer,
-            NaermesteLederService naermesteLederService,
             NarmesteLederConsumer narmesteLederConsumer
     ) {
         this.aktoerService = aktoerService;
         this.brukerTilgangConsumer = brukerTilgangConsumer;
         this.narmesteLederConsumer = narmesteLederConsumer;
-        this.naermesteLederService = naermesteLederService;
-    }
-
-    public boolean sporOmNoenAndreEnnSegSelvEllerEgneAnsatteEllerLedere(String innloggetFnr, String oppslattFnr) {
-        return !(sporInnloggetBrukerOmSegSelv(innloggetFnr, oppslattFnr) || sporInnloggetBrukerOmEnAnsatt(oppslattFnr) || sporInnloggetBrukerOmEnLeder(innloggetFnr, oppslattFnr));
-    }
-
-    private boolean sporInnloggetBrukerOmEnLeder(String innloggetFnr, String oppslattFnr) {
-        String innloggetAktorId = aktoerService.hentAktoerIdForFnr(innloggetFnr);
-        String oppslaattAktorId = aktoerService.hentAktoerIdForFnr(oppslattFnr);
-        return naermesteLederService.hentNaermesteLederAktoerIdListe(innloggetAktorId).stream()
-                .anyMatch(oppslaattAktorId::equals);
     }
 
     public boolean sporOmNoenAndreEnnSegSelvEllerEgneAnsatteEllerLedere(String innloggetFnr, String oppslattFnr, String virksomhetsnummer) {
