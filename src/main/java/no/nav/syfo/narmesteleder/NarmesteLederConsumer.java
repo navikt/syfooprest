@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Optional;
+
 import static no.nav.syfo.oidc.OIDCIssuer.EKSTERN;
 import static no.nav.syfo.utils.HttpHeaderUtil.NAV_PERSONIDENT;
 import static no.nav.syfo.utils.HttpHeaderUtil.bearerHeader;
@@ -26,6 +28,8 @@ public class NarmesteLederConsumer {
     private final RestTemplate restTemplate;
     private final String baseUrl;
 
+    public static final String ERROR_MESSAGE_BASE = "Error requesting Naermeste Leder from syfoppfolgingsplanservice via syfoapi";
+
     public NarmesteLederConsumer(
             OIDCRequestContextHolder oidcContextHolder,
             Metric metric,
@@ -38,7 +42,7 @@ public class NarmesteLederConsumer {
         this.baseUrl = baseUrl;
     }
 
-    public Naermesteleder narmesteLeder(String ansattFnr, String virksomhetsnummer) {
+    public Optional<Naermesteleder> narmesteLeder(String ansattFnr, String virksomhetsnummer) {
         metric.countEvent("call_syfoapi_narmesteleder_ansatt");
         try {
             ResponseEntity<Naermesteleder> response = restTemplate.exchange(
@@ -48,10 +52,19 @@ public class NarmesteLederConsumer {
                     new ParameterizedTypeReference<Naermesteleder>() {
                     }
             );
+            if (response.getStatusCode() == HttpStatus.NO_CONTENT) {
+                LOG.warn("Did not Find Naermeste leder for Ansatt");
+                return Optional.empty();
+            } else if (response.getStatusCode() != HttpStatus.OK) {
+                metric.countEvent("call_syfoapi_narmesteleder_fail");
+                final String message = ERROR_MESSAGE_BASE + response.getStatusCode();
+                LOG.error(message);
+                throw new RuntimeException(message);
+            }
             metric.countEvent("call_syfoapi_narmesteleder_success");
-            return response.getBody();
+            return Optional.of(response.getBody());
         } catch (RestClientException e) {
-            LOG.error("Error requesting ansatt access from syfoppfolgingsplanservice via syfoapi", e);
+            LOG.error(ERROR_MESSAGE_BASE, e);
             metric.countEvent("call_syfoapi_narmesteleder_fail");
             throw e;
         }

@@ -16,6 +16,8 @@ import javax.inject.Inject;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 
+import java.util.Optional;
+
 import static no.nav.syfo.narmesteleder.NarmestelederMappers.narmesteLeder2Rs;
 import static no.nav.syfo.oidc.OIDCIssuer.EKSTERN;
 import static no.nav.syfo.utils.MapUtil.map;
@@ -71,17 +73,17 @@ public class NaermestelederRessurs {
             throw new ForbiddenException();
         }
 
-        RSNaermesteLeder naermesteLeder = mapNaermesteLeder(narmesteLederConsumer.narmesteLeder(fnr, virksomhetsnummer));
-
-        if (!naermesteLeder.erAktiv) {
+        Optional<Naermesteleder> naermesteleder = narmesteLederConsumer.narmesteLeder(fnr, virksomhetsnummer);
+        if (!naermesteleder.isPresent() || !naermesteleder.get().naermesteLederStatus.erAktiv) {
             throw new NotFoundException();
         }
 
-        return naermesteLeder;
+        return mapNaermesteLeder(naermesteleder.get());
     }
 
     private RSNaermesteLeder mapNaermesteLeder(Naermesteleder naermesteleder) {
-        return map(naermesteleder, narmesteLeder2Rs)
+        RSNaermesteLeder  rsNaermesteLeder = map(naermesteleder, narmesteLeder2Rs);
+        return rsNaermesteLeder
                 .fnr(aktoerService.hentFnrForAktoer(naermesteleder.naermesteLederAktoerId));
     }
 

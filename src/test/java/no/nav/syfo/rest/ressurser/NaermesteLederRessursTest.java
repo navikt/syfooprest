@@ -67,7 +67,7 @@ public class NaermesteLederRessursTest {
                 .orgnummer(VIRKSOMHETSNUMMER)
                 .naermesteLederStatus(new NaermesteLederStatus()
                         .erAktiv(true));
-        when(narmesteLederConsumer.narmesteLeder(anyString(), anyString())).thenReturn(leder);
+        when(narmesteLederConsumer.narmesteLeder(anyString(), anyString())).thenReturn(Optional.of(leder));
 
         RSNaermesteLeder rsNaermesteLeder = naermestelederRessurs.hentNaermesteLeder(ARBEIDSTAKER_FNR, VIRKSOMHETSNUMMER);
 
