@@ -3,6 +3,8 @@ package no.nav.syfo.rest.ressurser;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 import no.nav.syfo.metric.Metric;
+import no.nav.syfo.narmesteleder.Naermesteleder;
+import no.nav.syfo.narmesteleder.NarmesteLederConsumer;
 import no.nav.syfo.rest.domain.RSNaermesteLeder;
 import no.nav.syfo.services.*;
 import org.slf4j.Logger;
@@ -14,7 +16,9 @@ import javax.inject.Inject;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 
+import static no.nav.syfo.narmesteleder.NarmestelederMappers.narmesteLeder2Rs;
 import static no.nav.syfo.oidc.OIDCIssuer.EKSTERN;
+import static no.nav.syfo.utils.MapUtil.map;
 import static no.nav.syfo.utils.OIDCUtil.getSubjectEkstern;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -33,6 +37,7 @@ public class NaermestelederRessurs {
     private final OIDCRequestContextHolder contextHolder;
     private final TilgangskontrollService tilgangskontrollService;
     private final AktoerService aktoerService;
+    private final NarmesteLederConsumer narmesteLederConsumer;
     private final NaermesteLederService naermesteLederService;
 
     @Inject
@@ -41,12 +46,14 @@ public class NaermestelederRessurs {
             OIDCRequestContextHolder contextHolder,
             TilgangskontrollService tilgangskontrollService,
             AktoerService aktoerService,
+            NarmesteLederConsumer narmesteLederConsumer,
             NaermesteLederService naermesteLederService
     ) {
         this.metric = metric;
         this.contextHolder = contextHolder;
         this.tilgangskontrollService = tilgangskontrollService;
         this.aktoerService = aktoerService;
+        this.narmesteLederConsumer = narmesteLederConsumer;
         this.naermesteLederService = naermesteLederService;
     }
 
@@ -64,13 +71,18 @@ public class NaermestelederRessurs {
             throw new ForbiddenException();
         }
 
-        RSNaermesteLeder naermesteLeder = naermesteLederService.hentNaermesteLeder(aktoerService.hentAktoerIdForFnr(fnr), virksomhetsnummer);
+        RSNaermesteLeder naermesteLeder = mapNaermesteLeder(narmesteLederConsumer.narmesteLeder(fnr, virksomhetsnummer));
 
         if (!naermesteLeder.erAktiv) {
             throw new NotFoundException();
         }
 
         return naermesteLeder;
+    }
+
+    private RSNaermesteLeder mapNaermesteLeder(Naermesteleder naermesteleder) {
+        return map(naermesteleder, narmesteLeder2Rs)
+                .fnr(aktoerService.hentFnrForAktoer(naermesteleder.naermesteLederAktoerId));
     }
 
     @GetMapping(path = "/forrige", produces = APPLICATION_JSON_VALUE)
