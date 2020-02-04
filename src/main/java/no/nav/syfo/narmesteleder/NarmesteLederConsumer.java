@@ -62,7 +62,7 @@ public class NarmesteLederConsumer {
                 throw new RuntimeException(message);
             }
             metric.countEvent("call_syfoapi_narmesteleder_success");
-            return Optional.of(response.getBody());
+            return Optional.ofNullable(response.getBody());
         } catch (RestClientException e) {
             LOG.error(ERROR_MESSAGE_BASE, e);
             metric.countEvent("call_syfoapi_narmesteleder_fail");
