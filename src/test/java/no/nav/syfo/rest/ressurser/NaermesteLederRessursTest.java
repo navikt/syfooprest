@@ -6,14 +6,13 @@ import no.nav.syfo.model.NaermesteLederStatus;
 import no.nav.syfo.narmesteleder.Naermesteleder;
 import no.nav.syfo.narmesteleder.NarmesteLederConsumer;
 import no.nav.syfo.rest.domain.RSNaermesteLeder;
-import no.nav.syfo.services.*;
-import no.nav.tjeneste.virksomhet.sykefravaersoppfoelging.v1.SykefravaersoppfoelgingV1;
+import no.nav.syfo.services.AktoerService;
+import no.nav.syfo.services.TilgangskontrollService;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -23,9 +22,7 @@ import java.util.Optional;
 import static no.nav.syfo.testhelper.OidcTestHelper.loggInnBruker;
 import static no.nav.syfo.testhelper.OidcTestHelper.loggUtAlle;
 import static no.nav.syfo.testhelper.UserConstants.*;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -45,11 +42,7 @@ public class NaermesteLederRessursTest {
     @MockBean
     private TilgangskontrollService tilgangskontrollService;
     @MockBean
-    private SykefravaersoppfoelgingV1 sykefravaersoppfoelgingV1;
-    @MockBean
     private NarmesteLederConsumer narmesteLederConsumer;
-    @MockBean
-    private NaermesteLederService naermesteLederService;
 
     @After
     public void tearDown() {
@@ -72,16 +65,5 @@ public class NaermesteLederRessursTest {
         RSNaermesteLeder rsNaermesteLeder = naermestelederRessurs.hentNaermesteLeder(ARBEIDSTAKER_FNR, VIRKSOMHETSNUMMER);
 
         assertEquals(LEDER_FNR, rsNaermesteLeder.fnr);
-    }
-
-    @Test
-    public void returnerer404ResponseVedIngeLedere() {
-        loggInnBruker(oidcRequestContextHolder, ARBEIDSTAKER_FNR);
-
-        when(tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(anyString(), anyString())).thenReturn(false);
-        when(naermesteLederService.hentForrigeNaermesteLeder(any(), any())).thenReturn(Optional.empty());
-
-        ResponseEntity responseEntity = naermestelederRessurs.hentForrigeNaermesteLeder(ARBEIDSTAKER_FNR, VIRKSOMHETSNUMMER);
-        assertThat(responseEntity.getStatusCodeValue()).isEqualTo(404);
     }
 }

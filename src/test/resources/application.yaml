@@ -25,7 +25,6 @@ no.nav.security.oidc:
 
 syfoapi.url: "http://syfoapi"
 aktoer.v2.endpointurl: "aktoerv2.url"
-sykefravaersoppfoelging.v1.endpointurl: "sykefravaeroppfoelgingv1.url"
 virksomhet:
   arbeidsforhold.v3.endpointurl: "arbeidsforhold.url"
   brukerprofil.v3.endpointurl: "brukerprofil.url"
@@ -41,7 +40,6 @@ arbeidsforhold.aareg.withmock: true
 brukerprofilv3.withmock: true
 dkif.withmock: true
 ereg.withmock: true
-sykefravaersoppfoelgingv1.withmock: true
 
 tilgangskontrollapi.url: "https://www.ikke.no"
 
