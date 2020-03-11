@@ -6,7 +6,8 @@ group = "no.nav.syfo"
 version = "1.0.0"
 
 val cxfVersion = "3.2.7"
-val oidcSpringSupportVersion = "0.2.4"
+val oidcSupportVersion = "0.2.7"
+val oidcSupportTestVersion = "0.2.4"
 val springBootVersion = "2.0.4.RELEASE"
 
 plugins {
@@ -54,8 +55,8 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.5")
     implementation("net.sf.ehcache:ehcache:2.10.6")
     implementation("io.micrometer:micrometer-registry-prometheus:1.0.6")
-    implementation("no.nav.security:oidc-support:0.2.4")
-    implementation("no.nav.security:oidc-spring-support:0.2.4")
+    implementation("no.nav.security:oidc-support:$oidcSupportVersion")
+    implementation("no.nav.security:oidc-spring-support:$oidcSupportVersion")
 
     implementation("org.apache.cxf:cxf-rt-features-logging:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-ws-security:$cxfVersion")
@@ -64,7 +65,7 @@ dependencies {
     implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
-    testImplementation("no.nav.security:oidc-spring-test:0.2.4")
+    testImplementation("no.nav.security:oidc-spring-test:$oidcSupportTestVersion")
 }
 
 

@@ -1,7 +1,7 @@
 package no.nav.syfo.rest.ressurser;
 
+import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
-import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 import no.nav.syfo.metric.Metric;
 import no.nav.syfo.rest.domain.RSPerson;
 import no.nav.syfo.services.BrukerprofilService;

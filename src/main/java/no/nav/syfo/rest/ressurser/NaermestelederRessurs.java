@@ -1,7 +1,7 @@
 package no.nav.syfo.rest.ressurser;
 
+import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
-import no.nav.security.spring.oidc.validation.api.ProtectedWithClaims;
 import no.nav.syfo.metric.Metric;
 import no.nav.syfo.narmesteleder.Naermesteleder;
 import no.nav.syfo.narmesteleder.NarmesteLederConsumer;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
-
 import java.util.Optional;
 
 import static no.nav.syfo.narmesteleder.NarmestelederMappers.narmesteLeder2Rs;
@@ -82,7 +81,7 @@ public class NaermestelederRessurs {
     }
 
     private RSNaermesteLeder mapNaermesteLeder(Naermesteleder naermesteleder) {
-        RSNaermesteLeder  rsNaermesteLeder = map(naermesteleder, narmesteLeder2Rs);
+        RSNaermesteLeder rsNaermesteLeder = map(naermesteleder, narmesteLeder2Rs);
         return rsNaermesteLeder
                 .fnr(aktoerService.hentFnrForAktoer(naermesteleder.naermesteLederAktoerId));
     }

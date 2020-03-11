@@ -1,12 +1,11 @@
 package no.nav.syfo.rest.ressurser;
 
-import no.nav.security.spring.oidc.validation.api.Unprotected;
+import no.nav.security.oidc.api.Unprotected;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Unprotected
 @RequestMapping(value = "/internal")
 public class SelftestRessurs {
     private static final String APPLICATION_LIVENESS = "Application is alive!";
