@@ -13,13 +13,12 @@ plugins {
     kotlin("jvm") version "1.3.31"
     id("java")
     id("com.github.johnrengelman.shadow") version "4.0.3"
-    id("org.springframework.boot") version "2.0.4.RELEASE"
+    id("org.springframework.boot") version "2.1.8.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
 }
 
 buildscript {
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.4.RELEASE")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.0")
     }
 }
