@@ -16,6 +16,7 @@ External data is retrieved with SOAP.
 
 ## Technology
 * Java
+* Kotlin
 * Spring Boot
 * Gradle
 
