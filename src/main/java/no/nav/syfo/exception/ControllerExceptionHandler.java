@@ -49,6 +49,10 @@ public class ControllerExceptionHandler {
             OIDCUnauthorizedException notAuthorizedException = (OIDCUnauthorizedException) ex;
 
             return handleOIDCUnauthorizedException(notAuthorizedException, headers, request);
+        } else if (ex instanceof RequestUnauthorizedException) {
+            RequestUnauthorizedException notAuthorizedException = (RequestUnauthorizedException) ex;
+
+            return handleRequestUnauthorizedException(notAuthorizedException, headers, request);
         } else if (ex instanceof ForbiddenException) {
             ForbiddenException forbiddenException = (ForbiddenException) ex;
 
@@ -70,6 +74,10 @@ public class ControllerExceptionHandler {
 
             return handleExceptionInternal(ex, new ApiError(status.value(), INTERNAL_MSG), headers, status, request);
         }
+    }
+
+    private ResponseEntity<ApiError> handleRequestUnauthorizedException(RequestUnauthorizedException ex, HttpHeaders headers, WebRequest request) {
+        return handleExceptionInternal(ex, new ApiError(HttpStatus.UNAUTHORIZED.value(), UNAUTHORIZED_MSG), headers, HttpStatus.UNAUTHORIZED, request);
     }
 
     private ResponseEntity<ApiError> handleConstraintViolationException(ConstraintViolationException ex, HttpHeaders headers, WebRequest request) {

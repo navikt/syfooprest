@@ -1,6 +1,7 @@
 package no.nav.syfo.tilgang;
 
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
+import no.nav.syfo.exception.RequestUnauthorizedException;
 import no.nav.syfo.metric.Metric;
 import no.nav.syfo.utils.OIDCUtil;
 import org.slf4j.Logger;
@@ -8,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import static no.nav.syfo.oidc.OIDCIssuer.EKSTERN;
@@ -18,6 +19,8 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 @Service
 public class BrukerTilgangConsumer {
+
+    private final String METRIC_CALL_BRUKERTILGANG = "call_syfoapi_ansatttilgang";
 
     private static final Logger LOG = getLogger(BrukerTilgangConsumer.class);
 
@@ -39,7 +42,6 @@ public class BrukerTilgangConsumer {
     }
 
     public boolean hasAccessToAnsatt(String ansattFnr) {
-        metric.countEvent("call_syfoapi_ansatttilgang_ansatt");
         try {
             ResponseEntity<BrukerTilgang> response = restTemplate.exchange(
                     getAccessAnsattUrl(),
@@ -48,12 +50,16 @@ public class BrukerTilgangConsumer {
                     new ParameterizedTypeReference<BrukerTilgang>() {
                     }
             );
-            metric.countEvent("call_syfoapi_ansatttilgang_success");
+            metric.countOutgoingReponses(METRIC_CALL_BRUKERTILGANG, response.getStatusCodeValue());
             return response.getBody().tilgang;
-        } catch (RestClientException e) {
-            LOG.error("Error requesting ansatt access from syfoppfolgingsplanservice via syfoapi", e);
-            metric.countEvent("call_syfoapi_ansatttilgang_fail");
-            throw e;
+        } catch (RestClientResponseException e) {
+            metric.countOutgoingReponses(METRIC_CALL_BRUKERTILGANG, e.getRawStatusCode());
+            if (e.getRawStatusCode() == 401) {
+                throw new RequestUnauthorizedException("Unauthorized request to get access to Ansatt from Syfobrukertilgang via Syfoapi");
+            } else {
+                LOG.error("Error requesting Ansatt access from Syfoppfolgingsplanservice via Syfoapi: ", e);
+                throw e;
+            }
         }
     }
 

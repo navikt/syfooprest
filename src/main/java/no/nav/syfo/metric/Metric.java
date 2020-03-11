@@ -30,6 +30,16 @@ public class Metric {
         ).increment();
     }
 
+    public void countOutgoingReponses(String navn, Integer statusCode) {
+        registry.counter(
+                addPrefix(navn),
+                Tags.of(
+                        "type", "info",
+                        "status", statusCode.toString()
+                )
+        ).increment();
+    }
+
     public void countHttpReponse(int kode) {
         registry.counter(
                 addPrefix("httpstatus"),
