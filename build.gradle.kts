@@ -8,12 +8,13 @@ version = "1.0.0"
 val cxfVersion = "3.3.3"
 val oidcSupportVersion = "0.2.7"
 val oidcSupportTestVersion = "0.2.4"
-val springBootVersion = "2.0.4.RELEASE"
 
 plugins {
     kotlin("jvm") version "1.3.31"
-    id("com.github.johnrengelman.shadow") version "4.0.3"
     id("java")
+    id("com.github.johnrengelman.shadow") version "4.0.3"
+    id("org.springframework.boot") version "2.0.4.RELEASE"
+    id("io.spring.dependency-management") version "1.0.9.RELEASE"
 }
 
 buildscript {
@@ -41,10 +42,10 @@ dependencies {
 
     implementation("no.nav.tjenestespesifikasjoner:nav-fim-aktoer-v2-tjenestespesifikasjon:1.2019.07.10-12.21-b55f47790a9d")
 
-    implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-jersey:$springBootVersion")
-    implementation("org.springframework.boot:spring-boot-starter-logging:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-jersey")
+    implementation("org.springframework.boot:spring-boot-starter-logging")
 
     implementation("net.logstash.logback:logstash-logback-encoder:4.10")
     implementation("org.slf4j:slf4j-api:1.7.25")
@@ -64,7 +65,7 @@ dependencies {
     implementation("org.apache.cxf:cxf-rt-transports-http:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("no.nav.security:oidc-spring-test:$oidcSupportTestVersion")
 }
 
