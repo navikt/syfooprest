@@ -5,7 +5,7 @@ import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransf
 group = "no.nav.syfo"
 version = "1.0.0"
 
-val cxfVersion = "3.2.7"
+val cxfVersion = "3.3.3"
 val oidcSupportVersion = "0.2.7"
 val oidcSupportTestVersion = "0.2.4"
 val springBootVersion = "2.0.4.RELEASE"
