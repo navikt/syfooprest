@@ -1,2 +1,2 @@
-export SRV_USERNAME=$(cat /serviceuser/srvrestoppfoelgingsdialog-sbs/username)
-export SRV_PASSWORD=$(cat /serviceuser/srvrestoppfoelgingsdialog-sbs/password)
+export SRV_USERNAME=$(cat /serviceuser/srvsyfooprest-sbs/username)
+export SRV_PASSWORD=$(cat /serviceuser/srvsyfooprest-sbs/password)
