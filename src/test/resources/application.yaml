@@ -7,9 +7,13 @@ server:
   servlet:
     context-path: /syfooprest
 
-srvrestoppfoelgingsdialog:
+srv:
   username: "username"
-  password: "1234"
+  password: "password"
+
+srv.fss:
+  username: "username"
+  password: "password"
 
 securitytokenservice.url: "sts.url"
 
@@ -41,7 +45,12 @@ brukerprofilv3.withmock: true
 dkif.withmock: true
 ereg.withmock: true
 
+pdl.url: "https://pdl"
+security.token.service.rest.url: "https://security-token-service"
 tilgangskontrollapi.url: "https://www.ikke.no"
+
+syfooprest.api.ststoken.apikey.password: "apikey-sts"
+syfooprest.api.pdlapi.apikey.password: "apikey-pdlapi"
 
 tjenester.url: https://tjenester-q.nav.no
 
