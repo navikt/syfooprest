@@ -13,7 +13,7 @@ public class LocalApplicationConfig {
 
     public LocalApplicationConfig(Environment environment) {
         System.setProperty("SECURITYTOKENSERVICE_URL", "q12123");
-        System.setProperty("SRV_USERNAME", requireNonNull(environment.getProperty("srvrestoppfoelgingsdialog.username")));
-        System.setProperty("SRV_PASSWORD", requireNonNull(environment.getProperty("srvrestoppfoelgingsdialog.password")));
+        System.setProperty("SRV_USERNAME", requireNonNull(environment.getProperty("srv.username")));
+        System.setProperty("SRV_PASSWORD", requireNonNull(environment.getProperty("srv.password")));
     }
 }
