@@ -44,9 +44,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinLibVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinLibVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$kotlinJacksonVersion")
-    
+
     implementation("no.nav.tjenestespesifikasjoner:nav-arbeidsforhold-v3-tjenestespesifikasjon:1.2019.03.05-14.13-d95264192bc7")
-    implementation("no.nav.sbl:brukerprofil-v3-tjenestespesifikasjon:3.0.3")
     implementation("no.nav.syfo.tjenester:aktoer-v2:1.0")
     implementation("no.nav.syfo.tjenester:dkif-tjenestespesifikasjon:1.2")
     implementation("no.nav.sbl.dialogarena:organisasjonv4-tjenestespesifikasjon:1.0.1")
@@ -103,7 +102,7 @@ tasks {
         }
         mergeServiceFiles()
     }
-    
+
     named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
         kotlinOptions.jvmTarget = "1.8"
     }
