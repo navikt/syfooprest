@@ -43,7 +43,6 @@ public class NarmesteLederConsumer {
     }
 
     public Optional<Naermesteleder> narmesteLeder(String ansattFnr, String virksomhetsnummer) {
-        metric.countEvent("call_syfoapi_narmesteleder_ansatt");
         try {
             ResponseEntity<Naermesteleder> response = restTemplate.exchange(
                     getNarmesteLederUrl(virksomhetsnummer),
