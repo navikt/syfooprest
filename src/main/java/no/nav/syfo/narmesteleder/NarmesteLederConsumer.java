@@ -14,8 +14,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Optional;
 
 import static no.nav.syfo.oidc.OIDCIssuer.EKSTERN;
-import static no.nav.syfo.utils.HttpHeaderUtil.NAV_PERSONIDENT;
-import static no.nav.syfo.utils.HttpHeaderUtil.bearerHeader;
+import static no.nav.syfo.util.CredentialUtilKt.bearerHeader;
+import static no.nav.syfo.util.RequestUtilKt.NAV_PERSONIDENT;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Service

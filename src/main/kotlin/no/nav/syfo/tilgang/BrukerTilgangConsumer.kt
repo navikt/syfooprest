@@ -4,7 +4,8 @@ import no.nav.security.oidc.context.OIDCRequestContextHolder
 import no.nav.syfo.exception.RequestUnauthorizedException
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.oidc.OIDCIssuer
-import no.nav.syfo.utils.HttpHeaderUtil
+import no.nav.syfo.util.NAV_PERSONIDENT
+import no.nav.syfo.util.bearerHeader
 import no.nav.syfo.utils.OIDCUtil
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -46,8 +47,8 @@ class BrukerTilgangConsumer(
 
     private fun entity(personIdent: String): HttpEntity<*> {
         val headers = HttpHeaders()
-        headers.add(HttpHeaders.AUTHORIZATION, HttpHeaderUtil.bearerHeader(OIDCUtil.getIssuerToken(oidcContextHolder, OIDCIssuer.EKSTERN)))
-        headers.add(HttpHeaderUtil.NAV_PERSONIDENT, personIdent)
+        headers.add(HttpHeaders.AUTHORIZATION, bearerHeader(OIDCUtil.getIssuerToken(oidcContextHolder, OIDCIssuer.EKSTERN)))
+        headers.add(NAV_PERSONIDENT, personIdent)
         return HttpEntity<Any>(headers)
     }
 
