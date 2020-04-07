@@ -3,19 +3,12 @@ package no.nav.syfo.utils;
 import com.nimbusds.jwt.JWTClaimsSet;
 import no.nav.security.oidc.context.*;
 import no.nav.syfo.oidc.OIDCIssuer;
-import no.nav.syfo.services.ws.OnBehalfOfOutInterceptor;
-import org.apache.cxf.endpoint.Client;
 
 import java.util.Optional;
 
 import static no.nav.security.oidc.OIDCConstants.OIDC_VALIDATION_CONTEXT;
 
 public class OIDCUtil {
-
-    public static void leggTilOnBehalfOfOutInterceptorForOIDC(Client client, String OIDCToken) {
-        client.getRequestContext().put(OnBehalfOfOutInterceptor.REQUEST_CONTEXT_ONBEHALFOF_TOKEN_TYPE, OnBehalfOfOutInterceptor.TokenType.OIDC);
-        client.getRequestContext().put(OnBehalfOfOutInterceptor.REQUEST_CONTEXT_ONBEHALFOF_TOKEN, OIDCToken);
-    }
 
     private static OIDCValidationContext context(OIDCRequestContextHolder contextHolder) {
         return Optional.ofNullable(contextHolder.getOIDCValidationContext())
