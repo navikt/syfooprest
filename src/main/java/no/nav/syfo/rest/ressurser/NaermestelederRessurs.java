@@ -7,6 +7,7 @@ import no.nav.syfo.narmesteleder.Naermesteleder;
 import no.nav.syfo.narmesteleder.NarmesteLederConsumer;
 import no.nav.syfo.rest.domain.RSNaermesteLeder;
 import no.nav.syfo.services.*;
+import no.nav.syfo.tilgang.TilgangskontrollService;
 import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.*;
 

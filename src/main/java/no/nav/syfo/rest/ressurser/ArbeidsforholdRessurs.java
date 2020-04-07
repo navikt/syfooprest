@@ -5,7 +5,7 @@ import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.syfo.metric.Metric;
 import no.nav.syfo.rest.domain.RSStilling;
 import no.nav.syfo.services.ArbeidsforholdService;
-import no.nav.syfo.services.TilgangskontrollService;
+import no.nav.syfo.tilgang.TilgangskontrollService;
 import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.*;
 

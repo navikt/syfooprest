@@ -7,7 +7,7 @@ import no.nav.syfo.narmesteleder.Naermesteleder;
 import no.nav.syfo.narmesteleder.NarmesteLederConsumer;
 import no.nav.syfo.rest.domain.RSNaermesteLeder;
 import no.nav.syfo.services.AktoerService;
-import no.nav.syfo.services.TilgangskontrollService;
+import no.nav.syfo.tilgang.TilgangskontrollService;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;

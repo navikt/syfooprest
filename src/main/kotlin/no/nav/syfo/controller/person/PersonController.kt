@@ -6,7 +6,7 @@ import no.nav.syfo.metric.Metric
 import no.nav.syfo.oidc.OIDCIssuer
 import no.nav.syfo.pdl.PdlConsumer
 import no.nav.syfo.pdl.fullName
-import no.nav.syfo.services.TilgangskontrollService
+import no.nav.syfo.tilgang.TilgangskontrollService
 import no.nav.syfo.utils.OIDCUtil
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType

@@ -2,7 +2,7 @@ package no.nav.syfo.services;
 
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.syfo.LocalApplication;
-import no.nav.syfo.tilgang.BrukerTilgangConsumer;
+import no.nav.syfo.tilgang.*;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
