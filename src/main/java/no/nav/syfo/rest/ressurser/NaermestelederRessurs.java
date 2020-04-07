@@ -66,7 +66,7 @@ public class NaermestelederRessurs {
         }
 
         Optional<Naermesteleder> naermesteleder = narmesteLederConsumer.narmesteLeder(fnr, virksomhetsnummer);
-        if (!naermesteleder.isPresent() || !naermesteleder.get().naermesteLederStatus.erAktiv) {
+        if (naermesteleder.isEmpty() || !naermesteleder.get().naermesteLederStatus.erAktiv) {
             throw new NotFoundException();
         }
 
