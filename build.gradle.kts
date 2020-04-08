@@ -8,8 +8,7 @@ version = "1.0.0"
 val cxfVersion = "3.2.7"
 val kotlinLibVersion = "1.3.70"
 val kotlinJacksonVersion = "2.9.8"
-val oidcSupportVersion = "0.2.7"
-val oidcSupportTestVersion = "0.2.4"
+val oidcSupportVersion = "0.2.18"
 
 plugins {
     kotlin("jvm") version "1.3.70"
@@ -57,6 +56,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jersey")
     implementation("org.springframework.boot:spring-boot-starter-logging")
 
+    implementation("no.nav.security:oidc-spring-support:$oidcSupportVersion")
+    testImplementation("no.nav.security:oidc-test-support:$oidcSupportVersion")
+
     implementation("net.logstash.logback:logstash-logback-encoder:4.10")
     implementation("org.slf4j:slf4j-api:1.7.25")
     implementation("org.projectlombok:lombok:1.16.22")
@@ -66,8 +68,6 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.5")
     implementation("net.sf.ehcache:ehcache:2.10.6")
     implementation("io.micrometer:micrometer-registry-prometheus:1.0.6")
-    implementation("no.nav.security:oidc-support:$oidcSupportVersion")
-    implementation("no.nav.security:oidc-spring-support:$oidcSupportVersion")
 
     implementation("org.apache.cxf:cxf-rt-features-logging:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-ws-security:$cxfVersion")
@@ -76,7 +76,6 @@ dependencies {
     implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("no.nav.security:oidc-spring-test:$oidcSupportTestVersion")
 }
 
 
