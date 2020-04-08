@@ -44,25 +44,20 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinLibVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$kotlinJacksonVersion")
 
-    implementation("no.nav.tjenestespesifikasjoner:nav-arbeidsforhold-v3-tjenestespesifikasjon:1.2019.03.05-14.13-d95264192bc7")
-    implementation("no.nav.syfo.tjenester:aktoer-v2:1.0")
-    implementation("no.nav.syfo.tjenester:dkif-tjenestespesifikasjon:1.2")
-    implementation("no.nav.sbl.dialogarena:organisasjonv4-tjenestespesifikasjon:1.0.1")
-
-    implementation("no.nav.tjenestespesifikasjoner:nav-fim-aktoer-v2-tjenestespesifikasjon:1.2019.07.10-12.21-b55f47790a9d")
-
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-jersey")
     implementation("org.springframework.boot:spring-boot-starter-logging")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    implementation("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
 
     implementation("no.nav.security:oidc-spring-support:$oidcSupportVersion")
     testImplementation("no.nav.security:oidc-test-support:$oidcSupportVersion")
 
     implementation("net.logstash.logback:logstash-logback-encoder:4.10")
     implementation("org.slf4j:slf4j-api:1.7.25")
-    implementation("org.projectlombok:lombok:1.16.22")
-    annotationProcessor("org.projectlombok:lombok:1.16.20")
     implementation("javax.ws.rs:javax.ws.rs-api:2.0.1")
     implementation("javax.inject:javax.inject:1")
     implementation("org.apache.commons:commons-lang3:3.5")
@@ -75,7 +70,11 @@ dependencies {
     implementation("org.apache.cxf:cxf-rt-transports-http:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-frontend-jaxws:$cxfVersion")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("no.nav.tjenestespesifikasjoner:nav-arbeidsforhold-v3-tjenestespesifikasjon:1.2019.03.05-14.13-d95264192bc7")
+    implementation("no.nav.syfo.tjenester:aktoer-v2:1.0")
+    implementation("no.nav.syfo.tjenester:dkif-tjenestespesifikasjon:1.2")
+    implementation("no.nav.sbl.dialogarena:organisasjonv4-tjenestespesifikasjon:1.0.1")
+    implementation("no.nav.tjenestespesifikasjoner:nav-fim-aktoer-v2-tjenestespesifikasjon:1.2019.07.10-12.21-b55f47790a9d")
 }
 
 
