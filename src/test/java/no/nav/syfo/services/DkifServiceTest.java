@@ -9,8 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.time.OffsetDateTime;
-
+import static no.nav.syfo.util.DateUtilKt.getXMLGregorianCalendarNow;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -35,7 +34,7 @@ public class DkifServiceTest {
     @Test
     public void verifisertSiste18mnd() {
         boolean harVerifisert = dkifService.harVerfisertSiste18Mnd(new WSEpostadresse()
-                .withSistVerifisert(OffsetDateTime.now().minusDays(2)), new WSMobiltelefonnummer().withSistVerifisert(OffsetDateTime.now().minusDays(4)));
+                .withSistVerifisert(getXMLGregorianCalendarNow(2)), new WSMobiltelefonnummer().withSistVerifisert(getXMLGregorianCalendarNow(4)));
         assertThat(harVerifisert).isTrue();
     }
 }

@@ -13,6 +13,7 @@ import java.time.OffsetDateTime;
 
 import static java.util.Optional.ofNullable;
 import static no.nav.syfo.rest.domain.RSKontaktinfo.FeilAarsak.*;
+import static no.nav.syfo.util.DateUtilKt.convertToOffsetDateTime;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Service
@@ -73,14 +74,14 @@ public class DkifService {
     private boolean harVerifisertEpostSiste18Mnd(WSEpostadresse epostadresse) {
         return ofNullable(epostadresse)
                 .map(WSEpostadresse::getSistVerifisert)
-                .filter(sistVerifisertEpost -> sistVerifisertEpost.isAfter(OffsetDateTime.now().minusMonths(18)))
+                .filter(sistVerifisertEpost -> convertToOffsetDateTime(sistVerifisertEpost).isAfter(OffsetDateTime.now().minusMonths(18)))
                 .isPresent();
     }
 
     private boolean harVerifisertMobilSiste18Mnd(WSMobiltelefonnummer mobiltelefonnummer) {
         return ofNullable(mobiltelefonnummer)
                 .map(WSMobiltelefonnummer::getSistVerifisert)
-                .filter(sistVerifisertEpost -> sistVerifisertEpost.isAfter(OffsetDateTime.now().minusMonths(18)))
+                .filter(sistVerifisertEpost -> convertToOffsetDateTime(sistVerifisertEpost).isAfter(OffsetDateTime.now().minusMonths(18)))
                 .isPresent();
     }
 
