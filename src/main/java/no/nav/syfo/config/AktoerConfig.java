@@ -15,7 +15,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.*;
 
 import javax.xml.namespace.QName;
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.handler.Handler;
 import java.util.Arrays;
+import java.util.List;
 
 import static java.util.Collections.singletonList;
 

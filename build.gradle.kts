@@ -5,6 +5,10 @@ import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransf
 group = "no.nav.syfo"
 version = "1.0.0"
 
+val jaxbApiVersion = "2.4.0-b180830.0359"
+val jaxbRuntimeVersion = "2.4.0-b180830.0438"
+val jaxwsToolsVersion = "2.3.1"
+
 val cxfVersion = "3.2.7"
 val kotlinLibVersion = "1.3.70"
 val kotlinJacksonVersion = "2.9.8"
@@ -22,6 +26,11 @@ plugins {
 
 buildscript {
     dependencies {
+        classpath("javax.xml.bind:jaxb-api:2.4.0-b180830.0359")
+        classpath("org.glassfish.jaxb:jaxb-runtime:2.4.0-b180830.0438")
+        classpath("com.sun.xml.ws:jaxws-tools:2.3.1") {
+            exclude(group = "com.sun.xml.ws", module = "policy")
+        }
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.0")
     }
 }
@@ -64,6 +73,12 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.5")
     implementation("net.sf.ehcache:ehcache:2.10.6")
     implementation("io.micrometer:micrometer-registry-prometheus:1.0.6")
+
+    implementation("javax.xml.bind:jaxb-api:$jaxbApiVersion")
+    implementation("org.glassfish.jaxb:jaxb-runtime:$jaxbRuntimeVersion")
+    implementation("com.sun.xml.ws:jaxws-tools:$jaxwsToolsVersion") {
+        exclude(group = "com.sun.xml.ws", module = "policy")
+    }
 
     implementation("org.apache.cxf:cxf-rt-features-logging:$cxfVersion")
     implementation("org.apache.cxf:cxf-rt-ws-security:$cxfVersion")
