@@ -36,7 +36,7 @@ public class DkifService {
     @Cacheable(cacheNames = "kontaktinfoByFnr", key = "#fnr", condition = "#fnr != null")
     public RSKontaktinfo hentRSKontaktinfoFnr(String fnr) {
         if (!fnr.matches("\\d{11}$")) {
-            log.error("Prøvde å hente kontaktinfo med fnr {}", fnr);
+            log.error("Prøvde å hente kontaktinfo med fnr");
             throw new RuntimeException();
         }
 
@@ -62,7 +62,7 @@ public class DkifService {
         } catch (HentDigitalKontaktinformasjonPersonIkkeFunnet e) {
             return new RSKontaktinfo().fnr(fnr).skalHaVarsel(false).feilAarsak(PERSON_IKKE_FUNNET);
         } catch (RuntimeException e) {
-            log.error("Fikk en runtimefeil mot DKIF med fnr {}", fnr, e);
+            log.error("Fikk en runtimefeil mot DKIF med fnr", e);
             throw e;
         }
     }
