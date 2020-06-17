@@ -1,16 +1,15 @@
 package no.nav.syfo.mock;
 
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.*;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.WSEpostadresse;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.WSKontaktinformasjon;
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.WSMobiltelefonnummer;
+import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.*;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import java.time.OffsetDateTime;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import static no.nav.syfo.config.DkifConfig.MOCK_KEY;
+import static no.nav.syfo.util.DateUtilKt.getXMLGregorianCalendarNow;
 
 @Service
 @ConditionalOnProperty(value = MOCK_KEY, havingValue = "true")
@@ -18,10 +17,12 @@ public class DKIFMock implements DigitalKontaktinformasjonV1 {
 
     @Override
     public WSHentDigitalKontaktinformasjonResponse hentDigitalKontaktinformasjon(WSHentDigitalKontaktinformasjonRequest request) throws HentDigitalKontaktinformasjonKontaktinformasjonIkkeFunnet, HentDigitalKontaktinformasjonSikkerhetsbegrensing, HentDigitalKontaktinformasjonPersonIkkeFunnet {
+        XMLGregorianCalendar sistVerifisert = getXMLGregorianCalendarNow(10);
         return new WSHentDigitalKontaktinformasjonResponse()
                 .withDigitalKontaktinformasjon(new WSKontaktinformasjon()
-                        .withEpostadresse(new WSEpostadresse().withValue("test@nav.no").withSistVerifisert(OffsetDateTime.now().minusDays(10)))
-                        .withMobiltelefonnummer(new WSMobiltelefonnummer().withValue("12345678").withSistVerifisert(OffsetDateTime.now().minusDays(10)))
+                        .withEpostadresse(new WSEpostadresse().withValue("test@nav.no").withSistVerifisert(sistVerifisert))
+                        .withEpostadresse(new WSEpostadresse().withValue("test@nav.no").withSistVerifisert(sistVerifisert))
+                        .withMobiltelefonnummer(new WSMobiltelefonnummer().withValue("12345678").withSistVerifisert(sistVerifisert))
                         .withReservasjon("false"));
     }
 
