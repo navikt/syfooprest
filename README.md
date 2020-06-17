@@ -35,7 +35,9 @@ Run `./gradlew test -i`
 
 ## Pipeline
 
-Pipeline in jenkins: https://jenkins-digisyfo.adeo.no/job/digisyfo/job/syfooprest/
+Pipeline is run with Github Actions.
+Commits to Master-branch are deployed automatically to dev-sbs and prod-sbs.
+Commits to non-master-branch is built with automatic deploy.
 
 #### Deploy
 
