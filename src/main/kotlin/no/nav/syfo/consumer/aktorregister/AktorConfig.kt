@@ -1,7 +1,7 @@
 package no.nav.syfo.consumer.aktorregister
 
 import no.nav.syfo.services.ws.LogErrorHandler
-import no.nav.syfo.services.ws.STSClientConfig
+import no.nav.syfo.ws.STSClientConfig
 import no.nav.tjeneste.virksomhet.aktoer.v2.AktoerV2
 import org.apache.cxf.feature.LoggingFeature
 import org.apache.cxf.frontend.ClientProxy

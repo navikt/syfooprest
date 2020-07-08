@@ -1,12 +1,12 @@
 package no.nav.syfo.kontaktinfo.consumer
 
 import no.nav.syfo.services.ws.*
+import no.nav.syfo.ws.STSClientConfig
 import no.nav.syfo.ws.WsClient
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.DigitalKontaktinformasjonV1
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.context.annotation.*
-import javax.xml.ws.handler.Handler
 
 @Configuration
 class DkifConfig(
