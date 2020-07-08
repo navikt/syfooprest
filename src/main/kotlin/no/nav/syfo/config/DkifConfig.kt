@@ -1,6 +1,7 @@
 package no.nav.syfo.config
 
 import no.nav.syfo.services.ws.*
+import no.nav.syfo.ws.WsClient
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.DigitalKontaktinformasjonV1
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty

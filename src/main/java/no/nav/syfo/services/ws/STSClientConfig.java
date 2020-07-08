@@ -28,19 +28,6 @@ public class STSClientConfig {
         return port;
     }
 
-    public static <T> T configureRequestSamlTokenOnBehalfOfOidc(T port) {
-        Client client = ClientProxy.getClient(port);
-        // Add interceptor to exctract token from request context and add to STS
-        // request as the OnbehalfOf element. Could use a callbackhandler instead if the oidc token
-        // can be retrieved from the thread, i.e. Spring SecurityContext etc, leaving this to the implementer of
-        // the application.
-        client.getOutInterceptors().add(new OnBehalfOfOutInterceptor());
-
-        // want to cache the token with the OnBehalfOfToken, not per proxy
-        configureStsRequestSamlToken(client, false);
-        return port;
-    }
-
     protected static void configureStsRequestSamlToken(Client client, boolean cacheTokenInEndpoint) {
         // TODO: remove custom client when STS is updated to support the cxf client
         STSClient stsClient = createCustomSTSClient(client.getBus());
