@@ -3,7 +3,7 @@ package no.nav.syfo.rest.ressurser;
 import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.syfo.metric.Metric;
 import no.nav.syfo.rest.domain.RSVirksomhet;
-import no.nav.syfo.services.OrganisasjonService;
+import no.nav.syfo.service.OrganisasjonService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
