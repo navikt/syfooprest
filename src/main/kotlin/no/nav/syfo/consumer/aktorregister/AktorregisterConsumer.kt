@@ -1,7 +1,7 @@
 package no.nav.syfo.consumer.aktorregister
 
-import no.nav.syfo.rest.feil.Feilmelding.Feil
-import no.nav.syfo.rest.feil.SyfoException
+import no.nav.syfo.api.exception.Feilmelding.Feil
+import no.nav.syfo.api.exception.SyfoException
 import no.nav.tjeneste.virksomhet.aktoer.v2.*
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.WSHentAktoerIdForIdentRequest
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.WSHentIdentForAktoerIdRequest

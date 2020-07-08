@@ -1,8 +1,8 @@
 package no.nav.syfo.arbeidsforhold.aareg
 
 import no.nav.syfo.arbeidsforhold.controller.RSStilling
-import no.nav.syfo.rest.feil.Feilmelding.Feil
-import no.nav.syfo.rest.feil.SyfoException
+import no.nav.syfo.api.exception.Feilmelding.Feil
+import no.nav.syfo.api.exception.SyfoException
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.*
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.*
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.meldinger.FinnArbeidsforholdPrArbeidstakerRequest
