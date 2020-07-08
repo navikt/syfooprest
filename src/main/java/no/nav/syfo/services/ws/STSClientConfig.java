@@ -1,5 +1,6 @@
 package no.nav.syfo.services.ws;
 
+import no.nav.syfo.ws.STSClientWSTrust13and14;
 import org.apache.cxf.Bus;
 import org.apache.cxf.binding.soap.Soap12;
 import org.apache.cxf.binding.soap.SoapMessage;
