@@ -1,7 +1,6 @@
 package no.nav.syfo.tilgang
 
 import no.nav.security.oidc.context.OIDCRequestContextHolder
-import no.nav.syfo.exception.RequestUnauthorizedException
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.oidc.OIDCIssuer
 import no.nav.syfo.util.NAV_PERSONIDENT
