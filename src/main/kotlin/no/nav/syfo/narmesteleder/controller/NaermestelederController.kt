@@ -43,7 +43,7 @@ class NaermestelederController @Inject constructor(
             naermesteleder == null -> {
                 throw NotFoundException()
             }
-            naermesteleder.naermesteLederStatus.erAktiv == false -> {
+            !naermesteleder.naermesteLederStatus.erAktiv -> {
                 throw NotFoundException()
             }
             else -> {
