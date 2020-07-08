@@ -1,6 +1,7 @@
 package no.nav.syfo.services;
 
 import no.nav.syfo.rest.domain.RSKontaktinfo;
+import no.nav.syfo.service.AktoerService;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.*;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.*;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.WSHentDigitalKontaktinformasjonRequest;

@@ -4,6 +4,7 @@ import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.syfo.metric.Metric;
 import no.nav.syfo.rest.domain.RSKontaktinfo;
+import no.nav.syfo.service.AktoerService;
 import no.nav.syfo.services.*;
 import no.nav.syfo.tilgang.TilgangskontrollService;
 import org.slf4j.Logger;

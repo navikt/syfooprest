@@ -6,7 +6,7 @@ import no.nav.syfo.metric.Metric
 import no.nav.syfo.narmesteleder.consumer.Naermesteleder
 import no.nav.syfo.narmesteleder.consumer.NarmesteLederConsumer
 import no.nav.syfo.oidc.OIDCIssuer
-import no.nav.syfo.services.AktoerService
+import no.nav.syfo.service.AktoerService
 import no.nav.syfo.tilgang.TilgangskontrollService
 import no.nav.syfo.oidc.OIDCUtil
 import org.slf4j.LoggerFactory
@@ -20,11 +20,11 @@ import javax.ws.rs.NotFoundException
 @ProtectedWithClaims(issuer = OIDCIssuer.EKSTERN)
 @RequestMapping(value = ["/api/naermesteleder/{fnr}"])
 class NaermestelederController @Inject constructor(
-        private val metric: Metric,
-        private val contextHolder: OIDCRequestContextHolder,
-        private val tilgangskontrollService: TilgangskontrollService,
-        private val aktoerService: AktoerService,
-        private val narmesteLederConsumer: NarmesteLederConsumer
+    private val metric: Metric,
+    private val contextHolder: OIDCRequestContextHolder,
+    private val tilgangskontrollService: TilgangskontrollService,
+    private val aktoerService: AktoerService,
+    private val narmesteLederConsumer: NarmesteLederConsumer
 ) {
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun hentNaermesteLeder(

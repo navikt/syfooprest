@@ -6,7 +6,7 @@ import no.nav.syfo.narmesteleder.consumer.NaermesteLederStatus
 import no.nav.syfo.narmesteleder.consumer.Naermesteleder
 import no.nav.syfo.narmesteleder.consumer.NarmesteLederConsumer
 import no.nav.syfo.narmesteleder.controller.NaermestelederController
-import no.nav.syfo.services.AktoerService
+import no.nav.syfo.service.AktoerService
 import no.nav.syfo.testhelper.OidcTestHelper
 import no.nav.syfo.testhelper.UserConstants
 import no.nav.syfo.tilgang.TilgangskontrollService
