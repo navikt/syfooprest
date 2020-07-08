@@ -1,4 +1,4 @@
-package no.nav.syfo.person.controller.person
+package no.nav.syfo.person.controller
 
 import no.nav.security.oidc.api.ProtectedWithClaims
 import no.nav.security.oidc.context.OIDCRequestContextHolder

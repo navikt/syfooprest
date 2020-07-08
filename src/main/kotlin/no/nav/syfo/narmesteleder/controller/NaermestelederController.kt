@@ -63,7 +63,6 @@ class NaermestelederController @Inject constructor(
                 aktivFom = naermesteleder.naermesteLederStatus.aktivFom,
                 aktivTom = naermesteleder.naermesteLederStatus.aktivTom,
                 fnr = lederFnr,
-                evaluering = null,
                 samtykke = null,
                 sistInnlogget = null
         )
