@@ -23,7 +23,7 @@ class EregConfig(
 
     private fun factory(): OrganisasjonV4 {
         return WsClient<OrganisasjonV4>()
-            .createPort(serviceUrl, OrganisasjonV4::class.java, listOf<Handler<*>>(LogErrorHandler()))
+            .createPort(serviceUrl, OrganisasjonV4::class.java, listOf(LogErrorHandler()))
     }
 
     companion object {

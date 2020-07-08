@@ -23,7 +23,7 @@ class DkifConfig(
 
     private fun factory(): DigitalKontaktinformasjonV1 {
         return WsClient<DigitalKontaktinformasjonV1>()
-            .createPort(serviceUrl, DigitalKontaktinformasjonV1::class.java, listOf<Handler<*>>(LogErrorHandler()))
+            .createPort(serviceUrl, DigitalKontaktinformasjonV1::class.java, listOf(LogErrorHandler()))
     }
 
     companion object {

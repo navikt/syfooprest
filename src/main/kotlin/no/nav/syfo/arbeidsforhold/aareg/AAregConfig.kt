@@ -23,7 +23,7 @@ class AAregConfig(
 
     private fun factory(): ArbeidsforholdV3 {
         return WsClient<ArbeidsforholdV3>()
-            .createPort(serviceUrl, ArbeidsforholdV3::class.java, listOf<Handler<*>>(LogErrorHandler()))
+            .createPort(serviceUrl, ArbeidsforholdV3::class.java, listOf(LogErrorHandler()))
     }
 
     companion object {

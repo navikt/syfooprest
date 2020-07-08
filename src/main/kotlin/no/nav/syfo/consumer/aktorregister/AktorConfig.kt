@@ -31,7 +31,7 @@ class AktorConfig(
     }
 
     private fun factory(): AktoerV2 {
-        return getPort(listOf<Handler<*>>(LogErrorHandler()))
+        return getPort(listOf(LogErrorHandler()))
     }
 
     fun getPort(handlers: List<Handler<*>?>?, vararg interceptors: PhaseInterceptor<out Message>): AktoerV2 {
