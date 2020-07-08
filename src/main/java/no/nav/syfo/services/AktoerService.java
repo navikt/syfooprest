@@ -5,7 +5,6 @@ import no.nav.tjeneste.virksomhet.aktoer.v2.*;
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.WSHentAktoerIdForIdentRequest;
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.WSHentIdentForAktoerIdRequest;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -15,23 +14,13 @@ import static no.nav.syfo.rest.feil.Feilmelding.Feil.AKTOER_IKKE_FUNNET;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Service
-public class AktoerService implements InitializingBean {
-    private static AktoerService instance;
+public class AktoerService {
 
     private final AktoerV2 aktoerV2;
 
     @Inject
     public AktoerService(AktoerV2 aktoerV2) {
         this.aktoerV2 = aktoerV2;
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        instance = this;
-    }
-
-    public static AktoerService aktoerService() {
-        return instance;
     }
 
     private static final Logger LOG = getLogger(AktoerService.class);
@@ -68,10 +57,5 @@ public class AktoerService implements InitializingBean {
             LOG.warn("FNR ikke funnet for aktoerId!", e);
             throw new SyfoException(AKTOER_IKKE_FUNNET);
         }
-    }
-
-    //used for test purposes only
-    public static void setInstance(AktoerService aktoerService) {
-        instance = aktoerService;
     }
 }
