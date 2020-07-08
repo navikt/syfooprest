@@ -1,4 +1,4 @@
-package no.nav.syfo.consumer.dkif
+package no.nav.syfo.kontaktinfo.consumer
 
 import no.nav.syfo.util.getXMLGregorianCalendarNow
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.*

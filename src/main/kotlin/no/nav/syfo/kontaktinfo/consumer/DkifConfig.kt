@@ -1,4 +1,4 @@
-package no.nav.syfo.consumer.dkif
+package no.nav.syfo.kontaktinfo.consumer
 
 import no.nav.syfo.services.ws.*
 import no.nav.syfo.ws.WsClient
