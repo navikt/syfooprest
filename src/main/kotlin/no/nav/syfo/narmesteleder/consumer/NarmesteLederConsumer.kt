@@ -5,7 +5,7 @@ import no.nav.syfo.metric.Metric
 import no.nav.syfo.oidc.OIDCIssuer
 import no.nav.syfo.util.NAV_PERSONIDENT
 import no.nav.syfo.util.bearerHeader
-import no.nav.syfo.utils.OIDCUtil
+import no.nav.syfo.oidc.OIDCUtil
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.ParameterizedTypeReference

@@ -7,7 +7,7 @@ import no.nav.syfo.oidc.OIDCIssuer
 import no.nav.syfo.pdl.PdlConsumer
 import no.nav.syfo.pdl.fullName
 import no.nav.syfo.tilgang.TilgangskontrollService
-import no.nav.syfo.utils.OIDCUtil
+import no.nav.syfo.oidc.OIDCUtil
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*

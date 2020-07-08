@@ -8,7 +8,7 @@ import no.nav.syfo.narmesteleder.consumer.NarmesteLederConsumer
 import no.nav.syfo.oidc.OIDCIssuer
 import no.nav.syfo.services.AktoerService
 import no.nav.syfo.tilgang.TilgangskontrollService
-import no.nav.syfo.utils.OIDCUtil
+import no.nav.syfo.oidc.OIDCUtil
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*

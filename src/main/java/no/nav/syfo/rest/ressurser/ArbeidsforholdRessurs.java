@@ -14,7 +14,7 @@ import javax.ws.rs.ForbiddenException;
 import java.util.List;
 
 import static no.nav.syfo.oidc.OIDCIssuer.EKSTERN;
-import static no.nav.syfo.utils.OIDCUtil.getSubjectEkstern;
+import static no.nav.syfo.oidc.OIDCUtil.getSubjectEkstern;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
