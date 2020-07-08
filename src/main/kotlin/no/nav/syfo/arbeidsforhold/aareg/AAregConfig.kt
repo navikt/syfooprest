@@ -1,8 +1,6 @@
 package no.nav.syfo.arbeidsforhold.aareg
 
-import no.nav.syfo.services.ws.*
-import no.nav.syfo.ws.STSClientConfig
-import no.nav.syfo.ws.WsClient
+import no.nav.syfo.ws.*
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.ArbeidsforholdV3
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
