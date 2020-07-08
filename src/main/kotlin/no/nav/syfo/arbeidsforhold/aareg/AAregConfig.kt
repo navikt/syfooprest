@@ -1,4 +1,4 @@
-package no.nav.syfo.consumer.arbeidsforhold
+package no.nav.syfo.arbeidsforhold.aareg
 
 import no.nav.syfo.services.ws.*
 import no.nav.syfo.ws.WsClient

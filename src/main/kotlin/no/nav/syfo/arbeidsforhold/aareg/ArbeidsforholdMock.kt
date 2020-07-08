@@ -1,4 +1,4 @@
-package no.nav.syfo.consumer.arbeidsforhold
+package no.nav.syfo.arbeidsforhold.aareg
 
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.binding.*
 import no.nav.tjeneste.virksomhet.arbeidsforhold.v3.informasjon.arbeidsforhold.Arbeidsforhold
