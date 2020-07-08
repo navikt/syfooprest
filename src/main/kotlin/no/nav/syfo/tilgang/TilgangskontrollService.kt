@@ -1,5 +1,6 @@
 package no.nav.syfo.tilgang
 
+import no.nav.syfo.tilgang.consumer.BrukerTilgangConsumer
 import org.springframework.stereotype.Service
 import javax.inject.Inject
 

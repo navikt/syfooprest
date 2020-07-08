@@ -1,6 +1,6 @@
 package no.nav.syfo.testhelper;
 
-import no.nav.syfo.mock.AktoerMock;
+import no.nav.syfo.consumer.aktorregister.AktoerMock;
 
 public class UserConstants {
 

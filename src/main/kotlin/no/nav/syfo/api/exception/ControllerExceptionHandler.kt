@@ -2,7 +2,7 @@ package no.nav.syfo.api.exception
 
 import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedException
 import no.nav.syfo.metric.Metric
-import no.nav.syfo.tilgang.RequestUnauthorizedException
+import no.nav.syfo.tilgang.consumer.RequestUnauthorizedException
 import org.slf4j.LoggerFactory
 import org.springframework.http.*
 import org.springframework.web.bind.annotation.ControllerAdvice

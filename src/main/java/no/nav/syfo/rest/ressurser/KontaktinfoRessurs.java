@@ -4,7 +4,7 @@ import no.nav.security.oidc.api.ProtectedWithClaims;
 import no.nav.security.oidc.context.OIDCRequestContextHolder;
 import no.nav.syfo.metric.Metric;
 import no.nav.syfo.rest.domain.RSKontaktinfo;
-import no.nav.syfo.service.AktoerService;
+import no.nav.syfo.consumer.aktorregister.AktorregisterConsumer;
 import no.nav.syfo.services.*;
 import no.nav.syfo.tilgang.TilgangskontrollService;
 import org.slf4j.Logger;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import javax.ws.rs.ForbiddenException;
 
-import static no.nav.syfo.oidc.OIDCIssuer.EKSTERN;
-import static no.nav.syfo.oidc.OIDCUtil.getSubjectEkstern;
+import static no.nav.syfo.api.auth.OIDCIssuer.EKSTERN;
+import static no.nav.syfo.api.auth.OIDCUtil.getSubjectEkstern;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -28,7 +28,7 @@ public class KontaktinfoRessurs {
     private final Metric metric;
     private final OIDCRequestContextHolder contextHolder;
     private final DkifService dkifService;
-    private final AktoerService aktoerService;
+    private final AktorregisterConsumer aktorregisterConsumer;
     private final TilgangskontrollService tilgangskontrollService;
 
     @Inject
@@ -36,13 +36,13 @@ public class KontaktinfoRessurs {
             Metric metric,
             OIDCRequestContextHolder contextHolder,
             DkifService dkifService,
-            AktoerService aktoerService,
+            AktorregisterConsumer aktorregisterConsumer,
             TilgangskontrollService tilgangskontrollService
     ) {
         this.metric = metric;
         this.contextHolder = contextHolder;
         this.dkifService = dkifService;
-        this.aktoerService = aktoerService;
+        this.aktorregisterConsumer = aktorregisterConsumer;
         this.tilgangskontrollService = tilgangskontrollService;
     }
 
@@ -56,7 +56,7 @@ public class KontaktinfoRessurs {
             log.error("Fikk ikke hentet kontaktinfo: Innlogget person spurte om fnr man ikke lov til fordi det er hverken seg selv eller en av sine ansatte.");
             throw new ForbiddenException();
         }
-        String oppslaattAktoerId = aktoerService.hentAktoerIdForFnr(oppslaattFnr);
+        String oppslaattAktoerId = aktorregisterConsumer.hentAktorIdForFnr(oppslaattFnr);
         return dkifService.hentRSKontaktinfoAktoerId(oppslaattAktoerId);
     }
 }

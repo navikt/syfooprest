@@ -3,7 +3,7 @@ package no.nav.syfo.testhelper;
 import com.nimbusds.jwt.SignedJWT;
 import no.nav.security.oidc.context.*;
 import no.nav.security.oidc.test.support.JwtTokenGenerator;
-import no.nav.syfo.oidc.OIDCIssuer;
+import no.nav.syfo.api.auth.OIDCIssuer;
 
 public class OidcTestHelper {
 

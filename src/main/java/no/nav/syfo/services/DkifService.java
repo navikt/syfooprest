@@ -1,7 +1,7 @@
 package no.nav.syfo.services;
 
 import no.nav.syfo.rest.domain.RSKontaktinfo;
-import no.nav.syfo.service.AktoerService;
+import no.nav.syfo.consumer.aktorregister.AktorregisterConsumer;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.*;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.*;
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.meldinger.WSHentDigitalKontaktinformasjonRequest;
@@ -23,15 +23,15 @@ public class DkifService {
     private static final Logger log = getLogger(DkifService.class);
 
     private final DigitalKontaktinformasjonV1 dkifV1;
-    private final AktoerService aktoerService;
+    private final AktorregisterConsumer aktorregisterConsumer;
 
     @Inject
     public DkifService(
             DigitalKontaktinformasjonV1 dkifV1,
-            AktoerService aktoerService
+            AktorregisterConsumer aktorregisterConsumer
     ) {
         this.dkifV1 = dkifV1;
-        this.aktoerService = aktoerService;
+        this.aktorregisterConsumer = aktorregisterConsumer;
     }
 
     @Cacheable(cacheNames = "kontaktinfoByFnr", key = "#fnr", condition = "#fnr != null")
@@ -88,6 +88,6 @@ public class DkifService {
 
     @Cacheable(cacheNames = "kontaktinfoByAktorId", key = "#aktoerId", condition = "#aktoerId != null")
     public RSKontaktinfo hentRSKontaktinfoAktoerId(String aktoerId) {
-        return hentRSKontaktinfoFnr(aktoerService.hentFnrForAktoer(aktoerId));
+        return hentRSKontaktinfoFnr(aktorregisterConsumer.hentFnrForAktor(aktoerId));
     }
 }
