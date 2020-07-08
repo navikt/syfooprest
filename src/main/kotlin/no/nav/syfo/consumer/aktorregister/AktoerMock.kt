@@ -1,13 +1,12 @@
 package no.nav.syfo.consumer.aktorregister
 
-import no.nav.syfo.config.AktoerConfig
 import no.nav.tjeneste.virksomhet.aktoer.v2.*
 import no.nav.tjeneste.virksomhet.aktoer.v2.meldinger.*
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 
 @Service
-@ConditionalOnProperty(value = [AktoerConfig.MOCK_KEY], havingValue = "true")
+@ConditionalOnProperty(value = [AktorConfig.MOCK_KEY], havingValue = "true")
 class AktoerMock : AktoerV2 {
     @Throws(HentAktoerIdForIdentPersonIkkeFunnet::class)
     override fun hentAktoerIdForIdent(request: WSHentAktoerIdForIdentRequest): WSHentAktoerIdForIdentResponse {
