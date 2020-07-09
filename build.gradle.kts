@@ -61,9 +61,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-logging")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    implementation("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
-
     implementation("no.nav.security:oidc-spring-support:$oidcSupportVersion")
     testImplementation("no.nav.security:oidc-test-support:$oidcSupportVersion")
 
