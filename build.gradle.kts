@@ -10,6 +10,7 @@ val jaxbRuntimeVersion = "2.4.0-b180830.0438"
 val jaxwsToolsVersion = "2.3.1"
 
 val cxfVersion = "3.2.7"
+val junitJupiterVersion = "5.6.0"
 val kotlinLibVersion = "1.3.70"
 val kotlinJacksonVersion = "2.9.8"
 val mockkVersion = "1.9.3"
@@ -62,8 +63,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jersey")
     implementation("org.springframework.boot:spring-boot-starter-logging")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(module = "junit")
         exclude(module = "mockito-core")
     }
+    testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
 
     implementation("no.nav.security:oidc-spring-support:$oidcSupportVersion")
@@ -124,5 +127,11 @@ tasks {
 
     named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestKotlin") {
         kotlinOptions.jvmTarget = "1.8"
+    }
+
+    withType<Test> {
+        useJUnitPlatform {
+            includeEngines("junit-jupiter")
+        }
     }
 }
