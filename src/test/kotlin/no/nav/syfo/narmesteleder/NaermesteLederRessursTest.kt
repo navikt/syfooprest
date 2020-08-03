@@ -9,13 +9,13 @@ import no.nav.syfo.narmesteleder.controller.NaermestelederController
 import no.nav.syfo.testhelper.OidcTestHelper.getValidationContext
 import no.nav.syfo.testhelper.UserConstants
 import no.nav.syfo.tilgang.TilgangskontrollService
-import org.junit.Assert
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.springframework.test.context.junit4.SpringRunner
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.test.context.junit.jupiter.SpringExtension
 import java.time.LocalDate
 
-@RunWith(SpringRunner::class)
+@ExtendWith(SpringExtension::class)
 class NaermesteLederRessursTest {
     private val aktorregisterConsumer: AktorregisterConsumer = mockk()
 
@@ -58,6 +58,6 @@ class NaermesteLederRessursTest {
         )
         every { narmesteLederConsumer.narmesteLeder(any(), any()) }.returns(leder)
         val rsNaermesteLeder = naermestelederRessurs.hentNaermesteLeder(UserConstants.ARBEIDSTAKER_FNR, UserConstants.VIRKSOMHETSNUMMER)
-        Assert.assertEquals(UserConstants.LEDER_FNR, rsNaermesteLeder.fnr)
+        assertEquals(UserConstants.LEDER_FNR, rsNaermesteLeder.fnr)
     }
 }

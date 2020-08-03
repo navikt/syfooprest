@@ -4,11 +4,11 @@ import io.mockk.every
 import io.mockk.mockk
 import no.nav.syfo.tilgang.consumer.BrukerTilgangConsumer
 import org.assertj.core.api.Assertions
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.springframework.test.context.junit4.SpringRunner
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.test.context.junit.jupiter.SpringExtension
 
-@RunWith(SpringRunner::class)
+@ExtendWith(SpringExtension::class)
 class TilgangskontrollServiceTest {
     private val brukerTilgangConsumer: BrukerTilgangConsumer = mockk()
 
