@@ -12,6 +12,7 @@ val jaxwsToolsVersion = "2.3.1"
 val cxfVersion = "3.2.7"
 val kotlinLibVersion = "1.3.70"
 val kotlinJacksonVersion = "2.9.8"
+val mockkVersion = "1.9.3"
 val oidcSupportVersion = "0.2.18"
 val tjenestespesifikasjonerVersion = "1.2019.09.25-00.21-49b69f0625e0"
 
@@ -60,7 +61,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-jersey")
     implementation("org.springframework.boot:spring-boot-starter-logging")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(module = "mockito-core")
+    }
+    testImplementation("io.mockk:mockk:$mockkVersion")
 
     implementation("no.nav.security:oidc-spring-support:$oidcSupportVersion")
     testImplementation("no.nav.security:oidc-test-support:$oidcSupportVersion")
