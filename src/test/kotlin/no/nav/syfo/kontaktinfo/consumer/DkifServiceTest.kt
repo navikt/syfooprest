@@ -1,5 +1,6 @@
 package no.nav.syfo.kontaktinfo.consumer
 
+import io.mockk.mockk
 import no.nav.syfo.LocalApplication
 import no.nav.syfo.util.getXMLGregorianCalendarNow
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.DigitalKontaktinformasjonV1
@@ -9,7 +10,6 @@ import org.assertj.core.api.Assertions
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.junit4.SpringRunner
 import javax.inject.Inject
@@ -21,8 +21,7 @@ class DkifServiceTest {
     @Inject
     private lateinit var dkifConsumer: DkifConsumer
 
-    @MockBean
-    private lateinit var dkifV1: DigitalKontaktinformasjonV1
+    private val dkifV1: DigitalKontaktinformasjonV1 = mockk()
 
     @Test
     fun verifisertSiste18mndErNullsafe() {
