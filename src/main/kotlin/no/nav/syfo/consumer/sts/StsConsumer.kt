@@ -14,12 +14,12 @@ import java.time.LocalDateTime
 
 @Service
 class StsConsumer(
-        private val metric: Metric,
-        @Value("\${security.token.service.rest.url}") private val baseUrl: String,
-        @Value("\${srv.fss.username}") private val username: String,
-        @Value("\${srv.fss.password}") private val password: String,
-        @Value("\${syfooprest.api.ststoken.apikey.password}") private val apiKeySTS: String,
-        private val restTemplateDefault: RestTemplate
+    private val metric: Metric,
+    @Value("\${security.token.service.rest.url}") private val baseUrl: String,
+    @Value("\${srv.fss.username}") private val username: String,
+    @Value("\${srv.fss.password}") private val password: String,
+    @Value("\${syfooprest.api.ststoken.apikey.password}") private val apiKeySTS: String,
+    private val restTemplateDefault: RestTemplate
 ) {
     private var cachedOidcToken: STSToken? = null
 
@@ -29,10 +29,10 @@ class StsConsumer(
 
             try {
                 val response = restTemplateDefault.exchange<STSToken>(
-                        getStsTokenUrl(),
-                        HttpMethod.GET,
-                        request,
-                        object : ParameterizedTypeReference<STSToken>() {}
+                    getStsTokenUrl(),
+                    HttpMethod.GET,
+                    request,
+                    object : ParameterizedTypeReference<STSToken>() {}
                 )
                 cachedOidcToken = response.body
                 metric.countEvent(METRIC_CALL_STS_SUCCESS)
@@ -67,9 +67,9 @@ class StsConsumer(
 }
 
 data class STSToken(
-        val access_token: String,
-        val token_type: String,
-        val expires_in: Int
+    val access_token: String,
+    val token_type: String,
+    val expires_in: Int
 ) {
     val expirationTime: LocalDateTime = LocalDateTime.now().plusSeconds(expires_in - 10L)
 

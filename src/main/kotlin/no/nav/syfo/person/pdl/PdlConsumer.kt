@@ -14,11 +14,11 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 class PdlConsumer(
-        private val metric: Metric,
-        @Value("\${pdl.url}") private val pdlUrl: String,
-        @Value("\${syfooprest.api.pdlapi.apikey.password}") private val apiKeyPdlApi: String,
-        private val stsConsumer: StsConsumer,
-        private val restTemplate: RestTemplate
+    private val metric: Metric,
+    @Value("\${pdl.url}") private val pdlUrl: String,
+    @Value("\${syfooprest.api.pdlapi.apikey.password}") private val apiKeyPdlApi: String,
+    private val stsConsumer: StsConsumer,
+    private val restTemplate: RestTemplate
 ) {
     fun person(ident: String): PdlHentPerson? {
         val query = this::class.java.getResource("/pdl/hentPerson.graphql").readText().replace("[\n\r]", "")
@@ -26,10 +26,10 @@ class PdlConsumer(
 
         try {
             val pdlPerson = restTemplate.exchange<PdlPersonResponse>(
-                    pdlUrl,
-                    HttpMethod.POST,
-                    entity,
-                    object : ParameterizedTypeReference<PdlPersonResponse>() {}
+                pdlUrl,
+                HttpMethod.POST,
+                entity,
+                object : ParameterizedTypeReference<PdlPersonResponse>() {}
             )
 
             val pdlPersonReponse = pdlPerson.body!!

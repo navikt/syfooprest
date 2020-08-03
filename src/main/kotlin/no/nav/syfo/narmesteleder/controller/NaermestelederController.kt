@@ -28,8 +28,8 @@ class NaermestelederController @Inject constructor(
 ) {
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun hentNaermesteLeder(
-            @PathVariable("fnr") fnr: String,
-            @RequestParam("virksomhetsnummer") virksomhetsnummer: String
+        @PathVariable("fnr") fnr: String,
+        @RequestParam("virksomhetsnummer") virksomhetsnummer: String
     ): RSNaermesteLeder {
         metric.countEndpointRequest("hentNaermesteLeder")
         val innloggetFnr = OIDCUtil.getSubjectEkstern(contextHolder)
@@ -55,16 +55,16 @@ class NaermestelederController @Inject constructor(
     private fun mapNaermesteLeder(naermesteleder: Naermesteleder): RSNaermesteLeder {
         val lederFnr = aktorregisterConsumer.hentFnrForAktor(naermesteleder.naermesteLederAktoerId)
         return RSNaermesteLeder(
-                virksomhetsnummer = naermesteleder.orgnummer,
-                navn = naermesteleder.navn,
-                epost = naermesteleder.epost,
-                tlf = naermesteleder.mobil,
-                erAktiv = naermesteleder.naermesteLederStatus.erAktiv,
-                aktivFom = naermesteleder.naermesteLederStatus.aktivFom,
-                aktivTom = naermesteleder.naermesteLederStatus.aktivTom,
-                fnr = lederFnr,
-                samtykke = null,
-                sistInnlogget = null
+            virksomhetsnummer = naermesteleder.orgnummer,
+            navn = naermesteleder.navn,
+            epost = naermesteleder.epost,
+            tlf = naermesteleder.mobil,
+            erAktiv = naermesteleder.naermesteLederStatus.erAktiv,
+            aktivFom = naermesteleder.naermesteLederStatus.aktivFom,
+            aktivTom = naermesteleder.naermesteLederStatus.aktivTom,
+            fnr = lederFnr,
+            samtykke = null,
+            sistInnlogget = null
         )
     }
 

@@ -31,8 +31,12 @@ object STSClientConfig {
         configureStsWithPolicyForClient(stsClient, client, STS_REQUEST_SAML_POLICY, cacheTokenInEndpoint)
     }
 
-    private fun configureStsWithPolicyForClient(stsClient: STSClient, client: Client, policyReference: String,
-                                                cacheTokenInEndpoint: Boolean) {
+    private fun configureStsWithPolicyForClient(
+        stsClient: STSClient,
+        client: Client,
+        policyReference: String,
+        cacheTokenInEndpoint: Boolean
+    ) {
         val location = System.getenv("SECURITYTOKENSERVICE_URL")
         val username = System.getenv("SRV_USERNAME")
         val password = System.getenv("SRV_PASSWORD")
@@ -57,8 +61,12 @@ object STSClientConfig {
         return STSClientWSTrust13and14(bus)
     }
 
-    private fun configureSTSClient(stsClient: STSClient, location: String, username: String,
-                                   password: String): STSClient {
+    private fun configureSTSClient(
+        stsClient: STSClient,
+        location: String,
+        username: String,
+        password: String
+    ): STSClient {
         stsClient.isEnableAppliesTo = false
         stsClient.isAllowRenewing = false
         stsClient.location = location

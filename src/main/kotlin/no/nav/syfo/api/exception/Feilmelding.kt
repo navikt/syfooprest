@@ -18,7 +18,6 @@ class Feilmelding {
         ),
         AKTOER_IKKE_FUNNET(Response.Status.INTERNAL_SERVER_ERROR, "feilmelding.aktoer.ikke.funnet"
         );
-
     }
 
     private var feil: Feil? = null

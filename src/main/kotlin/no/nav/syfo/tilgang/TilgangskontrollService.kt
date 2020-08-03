@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 @Service
 class TilgangskontrollService @Inject constructor(
-        private val brukerTilgangConsumer: BrukerTilgangConsumer
+    private val brukerTilgangConsumer: BrukerTilgangConsumer
 ) {
     fun sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(innloggetFnr: String, oppslattFnr: String): Boolean {
         return !(sporInnloggetBrukerOmSegSelv(innloggetFnr, oppslattFnr) || sporInnloggetBrukerOmEnAnsatt(oppslattFnr))
@@ -19,5 +19,4 @@ class TilgangskontrollService @Inject constructor(
     private fun sporInnloggetBrukerOmSegSelv(innloggetFnr: String, fnr: String): Boolean {
         return fnr == innloggetFnr
     }
-
 }
