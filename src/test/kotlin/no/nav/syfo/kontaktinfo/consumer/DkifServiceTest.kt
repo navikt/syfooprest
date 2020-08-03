@@ -1,9 +1,7 @@
 package no.nav.syfo.kontaktinfo.consumer
 
-import io.mockk.mockk
 import no.nav.syfo.LocalApplication
 import no.nav.syfo.util.getXMLGregorianCalendarNow
-import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.DigitalKontaktinformasjonV1
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.WSEpostadresse
 import no.nav.tjeneste.virksomhet.digitalkontaktinformasjon.v1.informasjon.WSMobiltelefonnummer
 import org.assertj.core.api.Assertions
@@ -20,8 +18,6 @@ import javax.inject.Inject
 class DkifServiceTest {
     @Inject
     private lateinit var dkifConsumer: DkifConsumer
-
-    private val dkifV1: DigitalKontaktinformasjonV1 = mockk()
 
     @Test
     fun verifisertSiste18mndErNullsafe() {

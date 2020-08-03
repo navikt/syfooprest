@@ -2,7 +2,6 @@ package no.nav.syfo.narmesteleder
 
 import io.mockk.*
 import no.nav.security.oidc.context.OIDCRequestContextHolder
-import no.nav.syfo.LocalApplication
 import no.nav.syfo.consumer.aktorregister.AktorregisterConsumer
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.narmesteleder.consumer.*
@@ -13,14 +12,10 @@ import no.nav.syfo.tilgang.TilgangskontrollService
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.junit4.SpringRunner
 import java.time.LocalDate
 
 @RunWith(SpringRunner::class)
-@SpringBootTest(classes = [LocalApplication::class])
-@DirtiesContext
 class NaermesteLederRessursTest {
     private val aktorregisterConsumer: AktorregisterConsumer = mockk()
 
