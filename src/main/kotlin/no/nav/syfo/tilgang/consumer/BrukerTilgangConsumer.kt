@@ -17,18 +17,18 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 class BrukerTilgangConsumer(
-        private val oidcContextHolder: OIDCRequestContextHolder,
-        private val metric: Metric,
-        private val restTemplate: RestTemplate,
-        @param:Value("\${syfoapi.url}") private val baseUrl: String
+    private val oidcContextHolder: OIDCRequestContextHolder,
+    private val metric: Metric,
+    private val restTemplate: RestTemplate,
+    @param:Value("\${syfoapi.url}") private val baseUrl: String
 ) {
     fun hasAccessToAnsatt(ansattFnr: String): Boolean {
         return try {
             val response = restTemplate.exchange<BrukerTilgang>(
-                    accessAnsattUrl,
-                    HttpMethod.GET,
-                    entity(ansattFnr),
-                    BrukerTilgang::class.java
+                accessAnsattUrl,
+                HttpMethod.GET,
+                entity(ansattFnr),
+                BrukerTilgang::class.java
             )
             val responseBody = response.body!!
             metric.countOutgoingReponses(METRIC_CALL_BRUKERTILGANG, response.statusCodeValue)

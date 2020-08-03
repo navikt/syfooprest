@@ -78,16 +78,16 @@ class DkifConsumer @Inject constructor(
 
     private fun harVerifisertEpostSiste18Mnd(epostadresse: WSEpostadresse?): Boolean {
         return Optional.ofNullable(epostadresse)
-                .map { obj: WSEpostadresse -> obj.sistVerifisert }
-                .filter { sistVerifisertEpost: XMLGregorianCalendar -> convertToOffsetDateTime(sistVerifisertEpost).isAfter(OffsetDateTime.now().minusMonths(18)) }
-                .isPresent
+            .map { obj: WSEpostadresse -> obj.sistVerifisert }
+            .filter { sistVerifisertEpost: XMLGregorianCalendar -> convertToOffsetDateTime(sistVerifisertEpost).isAfter(OffsetDateTime.now().minusMonths(18)) }
+            .isPresent
     }
 
     private fun harVerifisertMobilSiste18Mnd(mobiltelefonnummer: WSMobiltelefonnummer?): Boolean {
-       return Optional.ofNullable(mobiltelefonnummer)
-                .map { obj: WSMobiltelefonnummer -> obj.sistVerifisert }
-                .filter { sistVerifisertEpost: XMLGregorianCalendar -> convertToOffsetDateTime(sistVerifisertEpost).isAfter(OffsetDateTime.now().minusMonths(18)) }
-                .isPresent
+        return Optional.ofNullable(mobiltelefonnummer)
+            .map { obj: WSMobiltelefonnummer -> obj.sistVerifisert }
+            .filter { sistVerifisertEpost: XMLGregorianCalendar -> convertToOffsetDateTime(sistVerifisertEpost).isAfter(OffsetDateTime.now().minusMonths(18)) }
+            .isPresent
     }
 
     @Cacheable(cacheNames = ["kontaktinfoByAktorId"], key = "#aktoerId", condition = "#aktoerId != null")

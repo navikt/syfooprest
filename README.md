@@ -33,6 +33,9 @@ Run `LocalApplication.main`. Runs on port 8580.
 
 Run `./gradlew test -i`
 
+#### Lint
+Run `./gradlew --continue ktlintCheck`
+
 ## Pipeline
 
 Pipeline is run with Github Actions.

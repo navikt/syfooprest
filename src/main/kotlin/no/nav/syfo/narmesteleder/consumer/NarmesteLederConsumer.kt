@@ -19,18 +19,18 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 class NarmesteLederConsumer(
-        private val oidcContextHolder: OIDCRequestContextHolder,
-        private val metric: Metric,
-        private val restTemplate: RestTemplate,
-        @param:Value("\${syfoapi.url}") private val baseUrl: String
+    private val oidcContextHolder: OIDCRequestContextHolder,
+    private val metric: Metric,
+    private val restTemplate: RestTemplate,
+    @param:Value("\${syfoapi.url}") private val baseUrl: String
 ) {
     fun narmesteLeder(ansattFnr: String, virksomhetsnummer: String): Naermesteleder? {
         return try {
             val response = restTemplate.exchange<Naermesteleder>(
-                    getNarmesteLederUrl(virksomhetsnummer),
-                    HttpMethod.GET,
-                    entity(ansattFnr),
-                    object : ParameterizedTypeReference<Naermesteleder>() {}
+                getNarmesteLederUrl(virksomhetsnummer),
+                HttpMethod.GET,
+                entity(ansattFnr),
+                object : ParameterizedTypeReference<Naermesteleder>() {}
             )
             if (response.statusCode == HttpStatus.NO_CONTENT) {
                 metric.countEvent("call_syfoapi_narmesteleder_nocontent")
@@ -64,5 +64,4 @@ class NarmesteLederConsumer(
         private val LOG = LoggerFactory.getLogger(NarmesteLederConsumer::class.java)
         const val ERROR_MESSAGE_BASE = "Error requesting Naermeste Leder from syfoppfolgingsplanservice via syfoapi"
     }
-
 }

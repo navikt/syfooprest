@@ -18,10 +18,10 @@ import javax.ws.rs.ForbiddenException
 @ProtectedWithClaims(issuer = OIDCIssuer.EKSTERN)
 @RequestMapping(value = ["/api/person/{fnr}"])
 class PersonController @Inject constructor(
-        private val metric: Metric,
-        private val contextHolder: OIDCRequestContextHolder,
-        private val pdlConsumer: PdlConsumer,
-        private val tilgangskontrollService: TilgangskontrollService
+    private val metric: Metric,
+    private val contextHolder: OIDCRequestContextHolder,
+    private val pdlConsumer: PdlConsumer,
+    private val tilgangskontrollService: TilgangskontrollService
 ) {
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun hentNavn(@PathVariable("fnr") fnr: String): Person {

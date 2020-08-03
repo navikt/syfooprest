@@ -20,6 +20,7 @@ plugins {
     id("java")
     id("com.github.johnrengelman.shadow") version "4.0.3"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.3.70"
+    id("org.jlleitschuh.gradle.ktlint") version "9.2.1"
     id("org.springframework.boot") version "2.2.6.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
 }
@@ -89,7 +90,6 @@ dependencies {
     implementation("no.nav.tjenestespesifikasjoner:organisasjonv4-tjenestespesifikasjon:$tjenestespesifikasjonerVersion")
     implementation("no.nav.tjenestespesifikasjoner:dial-nav-tjeneste-aktoer_v2:$tjenestespesifikasjonerVersion")
 }
-
 
 tasks {
     withType<Jar> {
