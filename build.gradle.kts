@@ -14,6 +14,7 @@ val junitJupiterVersion = "5.6.0"
 val kotlinLibVersion = "1.3.70"
 val kotlinJacksonVersion = "2.9.8"
 val mockkVersion = "1.9.3"
+val nimbusSDKVersion = "7.0.3"
 val oidcSupportVersion = "0.2.18"
 val tjenestespesifikasjonerVersion = "1.2019.09.25-00.21-49b69f0625e0"
 
@@ -69,6 +70,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:$junitJupiterVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
 
+    implementation("com.nimbusds:oauth2-oidc-sdk:$nimbusSDKVersion")
     implementation("no.nav.security:oidc-spring-support:$oidcSupportVersion")
     testImplementation("no.nav.security:oidc-test-support:$oidcSupportVersion")
 
