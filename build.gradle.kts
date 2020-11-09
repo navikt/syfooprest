@@ -81,6 +81,7 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.5")
     implementation("net.sf.ehcache:ehcache:2.10.6")
     implementation("io.micrometer:micrometer-registry-prometheus:1.0.6")
+    implementation("com.sun.activation:javax.activation:1.2.0")
 
     implementation("javax.xml.bind:jaxb-api:$jaxbApiVersion")
     implementation("org.glassfish.jaxb:jaxb-runtime:$jaxbRuntimeVersion")
