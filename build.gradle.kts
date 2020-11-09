@@ -81,6 +81,7 @@ dependencies {
     implementation("org.apache.commons:commons-lang3:3.5")
     implementation("net.sf.ehcache:ehcache:2.10.6")
     implementation("io.micrometer:micrometer-registry-prometheus:1.0.6")
+    implementation("com.sun.activation:javax.activation:1.2.0")
 
     implementation("javax.xml.bind:jaxb-api:$jaxbApiVersion")
     implementation("org.glassfish.jaxb:jaxb-runtime:$jaxbRuntimeVersion")
@@ -124,11 +125,11 @@ tasks {
     }
 
     named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "11"
     }
 
     named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestKotlin") {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = "11"
     }
 
     withType<Test> {
