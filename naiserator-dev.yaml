@@ -49,6 +49,8 @@ spec:
         mountPath: "/apigw/pdlapi"
       - kvPath: "/kv/preprod/sbs/syfooprest/default"
         mountPath: "/var/run/secrets/nais.io/vault"
+  envFrom:
+    - configmap: loginservice-idporten
   env:
     - name: APP_NAME
       value: "syfooprest"
@@ -60,10 +62,6 @@ spec:
       value: "true"
     - name: APPDYNAMICS_AGENT_ACCOUNT_NAME
       value: NON-PROD
-    - name: NO_NAV_SECURITY_OIDC_ISSUER_SELVBETJENING_ACCEPTEDAUDIENCE
-      value: 0090b6e1-ffcc-4c37-bc21-049f7d1f0fe5
-    - name: NO_NAV_SECURITY_OIDC_ISSUER_SELVBETJENING_DISCOVERYURL
-      value: https://login.microsoftonline.com/NAVtestB2C.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1A_idporten_ver1
     - name: SECURITYTOKENSERVICE_URL
       value: https://sts-q1.oera-q.local/SecurityTokenServiceProvider/
     - name: SERVICEGATEWAY_URL
