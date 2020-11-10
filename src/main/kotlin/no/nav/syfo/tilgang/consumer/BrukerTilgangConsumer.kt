@@ -1,6 +1,6 @@
 package no.nav.syfo.tilgang.consumer
 
-import no.nav.security.oidc.context.OIDCRequestContextHolder
+import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.api.auth.OIDCIssuer
 import no.nav.syfo.util.NAV_PERSONIDENT
@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 class BrukerTilgangConsumer(
-    private val oidcContextHolder: OIDCRequestContextHolder,
+    private val contextHolder: TokenValidationContextHolder,
     private val metric: Metric,
     private val restTemplate: RestTemplate,
     @param:Value("\${syfoapi.url}") private val baseUrl: String
@@ -46,7 +46,7 @@ class BrukerTilgangConsumer(
 
     private fun entity(personIdent: String): HttpEntity<*> {
         val headers = HttpHeaders()
-        headers.add(HttpHeaders.AUTHORIZATION, bearerHeader(OIDCUtil.getIssuerToken(oidcContextHolder, OIDCIssuer.EKSTERN)))
+        headers.add(HttpHeaders.AUTHORIZATION, bearerHeader(OIDCUtil.getIssuerToken(contextHolder, OIDCIssuer.EKSTERN)))
         headers.add(NAV_PERSONIDENT, personIdent)
         return HttpEntity<Any>(headers)
     }

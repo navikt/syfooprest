@@ -1,10 +1,9 @@
-no.nav.security.oidc:
-  issuers: selvbetjening
+no.nav.security.jwt:
   issuer:
     selvbetjening:
       discoveryurl: ${LOGINSERVICE_IDPORTEN_DISCOVERY_URL}
       accepted_audience: ${LOGINSERVICE_IDPORTEN_AUDIENCE}
-      cookie_name: selvbetjening-idtoken
+      cookiename: selvbetjening-idtoken
 
 logging.config: classpath:logback-spring.xml
 

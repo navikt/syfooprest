@@ -1,33 +1,18 @@
 package no.nav.syfo.testhelper
 
-import no.nav.security.oidc.context.*
-import no.nav.security.oidc.test.support.JwtTokenGenerator
-import no.nav.syfo.api.auth.OIDCIssuer
+import no.nav.security.token.support.core.context.TokenValidationContext
+import no.nav.security.token.support.core.jwt.JwtToken
+import no.nav.security.token.support.test.JwtTokenGenerator
+import no.nav.syfo.api.auth.OIDCIssuer.EKSTERN
 
 object OidcTestHelper {
-    @JvmStatic
-    fun loggInnBruker(oidcRequestContextHolder: OIDCRequestContextHolder, subject: String?) {
-        val jwt = JwtTokenGenerator.createSignedJWT(subject)
-        val issuer = OIDCIssuer.EKSTERN
-        val tokenContext = TokenContext(issuer, jwt.serialize())
-        val oidcClaims = OIDCClaims(jwt)
-        val oidcValidationContext = OIDCValidationContext()
-        oidcValidationContext.addValidatedToken(issuer, tokenContext, oidcClaims)
-        oidcRequestContextHolder.oidcValidationContext = oidcValidationContext
-    }
 
     @JvmStatic
-    fun getValidationContext(subject: String?): OIDCValidationContext {
-        val jwt = JwtTokenGenerator.createSignedJWT(subject)
-        val issuer = OIDCIssuer.EKSTERN
-        val tokenContext = TokenContext(issuer, jwt.serialize())
-        val oidcClaims = OIDCClaims(jwt)
-        val oidcValidationContext = OIDCValidationContext()
-        oidcValidationContext.addValidatedToken(issuer, tokenContext, oidcClaims)
-        return oidcValidationContext
-    }
-
-    fun loggUtAlle(oidcRequestContextHolder: OIDCRequestContextHolder) {
-        oidcRequestContextHolder.oidcValidationContext = null
+    fun getValidationContext(subject: String): TokenValidationContext {
+        val jwt = JwtToken(JwtTokenGenerator.createSignedJWT(subject).serialize())
+        val issuer = EKSTERN
+        val issuerTokenMap = HashMap<String, JwtToken>()
+        issuerTokenMap[issuer] = jwt
+        return TokenValidationContext(issuerTokenMap)
     }
 }

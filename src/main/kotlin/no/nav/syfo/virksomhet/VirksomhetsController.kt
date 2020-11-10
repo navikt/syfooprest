@@ -1,6 +1,6 @@
 package no.nav.syfo.virksomhet
 
-import no.nav.security.oidc.api.ProtectedWithClaims
+import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.api.auth.OIDCIssuer.EKSTERN
 import no.nav.syfo.virksomhet.consumer.OrganisasjonConsumer

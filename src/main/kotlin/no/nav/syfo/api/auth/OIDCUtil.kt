@@ -1,39 +1,18 @@
 package no.nav.syfo.api.auth
 
-import com.nimbusds.jwt.JWTClaimsSet
-import no.nav.security.oidc.OIDCConstants
-import no.nav.security.oidc.context.*
-import java.util.*
+import no.nav.security.token.support.core.context.TokenValidationContext
+import no.nav.security.token.support.core.context.TokenValidationContextHolder
 
 object OIDCUtil {
-    private fun context(contextHolder: OIDCRequestContextHolder): OIDCValidationContext {
-        return Optional.ofNullable(contextHolder.oidcValidationContext)
-            .orElse(null)
-    }
-
-    private fun claims(contextHolder: OIDCRequestContextHolder, issuer: String): OIDCClaims {
-        return Optional.ofNullable(context(contextHolder))
-            .map { s: OIDCValidationContext -> s.getClaims(issuer) }
-            .orElse(null)
-    }
-
-    private fun claimSet(contextHolder: OIDCRequestContextHolder, issuer: String): JWTClaimsSet {
-        return Optional.ofNullable(claims(contextHolder, issuer))
-            .map { obj: OIDCClaims -> obj.claimSet }
-            .orElse(null)
-    }
 
     @JvmStatic
-    fun getSubjectEkstern(contextHolder: OIDCRequestContextHolder): String {
-        return Optional.ofNullable(claimSet(contextHolder, OIDCIssuer.EKSTERN))
-            .map { obj: JWTClaimsSet -> obj.subject }
-            .orElse(null)
+    fun getSubjectEkstern(contextHolder: TokenValidationContextHolder): String {
+        val context: TokenValidationContext = contextHolder.tokenValidationContext
+        return context.getClaims(OIDCIssuer.EKSTERN)?.subject ?: throw RuntimeException("Fant ikke subject for OIDCIssuer Ekstern")
     }
 
-    fun getIssuerToken(contextHolder: OIDCRequestContextHolder, issuer: String?): String {
-        val context = contextHolder
-            .getRequestAttribute(OIDCConstants.OIDC_VALIDATION_CONTEXT) as OIDCValidationContext
-        val tokenContext = context.getToken(issuer)
-        return tokenContext.idToken
+    fun getIssuerToken(contextHolder: TokenValidationContextHolder, issuer: String): String {
+        val context = contextHolder.tokenValidationContext
+        return context.getJwtToken(issuer)?.tokenAsString ?: throw RuntimeException("Klarte ikke hente token for issuer: $issuer")
     }
 }
