@@ -1,11 +1,10 @@
 package no.nav.syfo.narmesteleder.controller
 
-import no.nav.security.oidc.api.ProtectedWithClaims
-import no.nav.security.oidc.context.OIDCRequestContextHolder
+import no.nav.security.token.support.core.api.ProtectedWithClaims
+import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.narmesteleder.consumer.Naermesteleder
 import no.nav.syfo.narmesteleder.consumer.NarmesteLederConsumer
-import no.nav.syfo.api.auth.OIDCIssuer
 import no.nav.syfo.consumer.aktorregister.AktorregisterConsumer
 import no.nav.syfo.tilgang.TilgangskontrollService
 import no.nav.syfo.api.auth.OIDCUtil
@@ -15,13 +14,14 @@ import org.springframework.web.bind.annotation.*
 import javax.inject.Inject
 import javax.ws.rs.ForbiddenException
 import javax.ws.rs.NotFoundException
+import no.nav.syfo.api.auth.OIDCIssuer.EKSTERN
 
 @RestController
-@ProtectedWithClaims(issuer = OIDCIssuer.EKSTERN)
+@ProtectedWithClaims(issuer = EKSTERN)
 @RequestMapping(value = ["/api/naermesteleder/{fnr}"])
 class NaermestelederController @Inject constructor(
     private val metric: Metric,
-    private val contextHolder: OIDCRequestContextHolder,
+    private val contextHolder: TokenValidationContextHolder,
     private val tilgangskontrollService: TilgangskontrollService,
     private val aktorregisterConsumer: AktorregisterConsumer,
     private val narmesteLederConsumer: NarmesteLederConsumer

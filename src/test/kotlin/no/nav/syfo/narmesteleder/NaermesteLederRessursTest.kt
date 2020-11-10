@@ -1,7 +1,7 @@
 package no.nav.syfo.narmesteleder
 
 import io.mockk.*
-import no.nav.security.oidc.context.OIDCRequestContextHolder
+import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.consumer.aktorregister.AktorregisterConsumer
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.narmesteleder.consumer.*
@@ -19,7 +19,7 @@ import java.time.LocalDate
 class NaermesteLederRessursTest {
     private val aktorregisterConsumer: AktorregisterConsumer = mockk()
 
-    private val oidcRequestContextHolder: OIDCRequestContextHolder = mockk()
+    private val oidcRequestContextHolder: TokenValidationContextHolder = mockk()
 
     private val tilgangskontrollService: TilgangskontrollService = mockk()
 
@@ -37,7 +37,7 @@ class NaermesteLederRessursTest {
 
     @Test
     fun hentNaermesteLederSuccess() {
-        every { oidcRequestContextHolder.oidcValidationContext }.returns(
+        every { oidcRequestContextHolder.tokenValidationContext }.returns(
             getValidationContext(UserConstants.LEDER_FNR)
         )
         every { aktorregisterConsumer.hentFnrForAktor(UserConstants.LEDER_AKTORID) }.returns(UserConstants.LEDER_FNR)

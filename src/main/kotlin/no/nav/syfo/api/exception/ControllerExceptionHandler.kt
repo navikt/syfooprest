@@ -1,6 +1,6 @@
 package no.nav.syfo.api.exception
 
-import no.nav.security.spring.oidc.validation.interceptor.OIDCUnauthorizedException
+import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException
 import no.nav.syfo.metric.Metric
 import no.nav.syfo.tilgang.consumer.RequestUnauthorizedException
 import org.slf4j.LoggerFactory
@@ -24,11 +24,11 @@ class ControllerExceptionHandler @Inject constructor(
     private val UNAUTHORIZED_MSG = "Autorisasjonsfeil"
     private val NOT_FOUND_MSG = "Fant ikke ressurs"
 
-    @ExceptionHandler(Exception::class, ConstraintViolationException::class, ForbiddenException::class, IllegalArgumentException::class, OIDCUnauthorizedException::class, NotFoundException::class)
+    @ExceptionHandler(Exception::class, ConstraintViolationException::class, ForbiddenException::class, IllegalArgumentException::class, JwtTokenUnauthorizedException::class, NotFoundException::class)
     fun handleException(ex: Exception, request: WebRequest): ResponseEntity<ApiError> {
         val headers = HttpHeaders()
         return when (ex) {
-            is OIDCUnauthorizedException -> {
+            is JwtTokenUnauthorizedException -> {
                 handleOIDCUnauthorizedException(ex, headers, request)
             }
             is RequestUnauthorizedException -> {
@@ -71,7 +71,7 @@ class ControllerExceptionHandler @Inject constructor(
         return handleExceptionInternal(ex, ApiError(status.value(), BAD_REQUEST_MSG), headers, status, request)
     }
 
-    private fun handleOIDCUnauthorizedException(ex: OIDCUnauthorizedException, headers: HttpHeaders, request: WebRequest): ResponseEntity<ApiError> {
+    private fun handleOIDCUnauthorizedException(ex: JwtTokenUnauthorizedException, headers: HttpHeaders, request: WebRequest): ResponseEntity<ApiError> {
         val status = HttpStatus.UNAUTHORIZED
         return handleExceptionInternal(ex, ApiError(status.value(), UNAUTHORIZED_MSG), headers, status, request)
     }

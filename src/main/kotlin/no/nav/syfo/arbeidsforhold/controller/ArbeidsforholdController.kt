@@ -1,7 +1,7 @@
 package no.nav.syfo.arbeidsforhold.controller
 
-import no.nav.security.oidc.api.ProtectedWithClaims
-import no.nav.security.oidc.context.OIDCRequestContextHolder
+import no.nav.security.token.support.core.api.ProtectedWithClaims
+import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.api.auth.OIDCIssuer.EKSTERN
 import no.nav.syfo.api.auth.OIDCUtil.getSubjectEkstern
 import no.nav.syfo.arbeidsforhold.aareg.ArbeidsforholdConsumer
@@ -18,7 +18,7 @@ import javax.ws.rs.ForbiddenException
 @RequestMapping(value = ["/api/arbeidsforhold"])
 class ArbeidsforholdController @Inject constructor(
     private val metric: Metric,
-    private val contextHolder: OIDCRequestContextHolder,
+    private val contextHolder: TokenValidationContextHolder,
     private val arbeidsforholdConsumer: ArbeidsforholdConsumer,
     private val tilgangskontrollService: TilgangskontrollService
 ) {

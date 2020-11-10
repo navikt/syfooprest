@@ -1,7 +1,7 @@
 package no.nav.syfo.kontaktinfo.controller
 
-import no.nav.security.oidc.api.ProtectedWithClaims
-import no.nav.security.oidc.context.OIDCRequestContextHolder
+import no.nav.security.token.support.core.api.ProtectedWithClaims
+import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.api.auth.OIDCIssuer.EKSTERN
 import no.nav.syfo.api.auth.OIDCUtil.getSubjectEkstern
 import no.nav.syfo.consumer.aktorregister.AktorregisterConsumer
@@ -19,7 +19,7 @@ import javax.ws.rs.ForbiddenException
 @RequestMapping(value = ["/api/kontaktinfo/{fnr}"])
 class KontaktinfoController @Inject constructor(
     private val metric: Metric,
-    private val contextHolder: OIDCRequestContextHolder,
+    private val contextHolder: TokenValidationContextHolder,
     private val dkifConsumer: DkifConsumer,
     private val aktorregisterConsumer: AktorregisterConsumer,
     private val tilgangskontrollService: TilgangskontrollService

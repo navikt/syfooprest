@@ -1,9 +1,9 @@
 package no.nav.syfo.person.controller
 
-import no.nav.security.oidc.api.ProtectedWithClaims
-import no.nav.security.oidc.context.OIDCRequestContextHolder
+import no.nav.security.token.support.core.api.ProtectedWithClaims
+import no.nav.security.token.support.core.context.TokenValidationContextHolder
 import no.nav.syfo.metric.Metric
-import no.nav.syfo.api.auth.OIDCIssuer
+import no.nav.syfo.api.auth.OIDCIssuer.EKSTERN
 import no.nav.syfo.person.pdl.PdlConsumer
 import no.nav.syfo.person.pdl.fullName
 import no.nav.syfo.tilgang.TilgangskontrollService
@@ -15,11 +15,11 @@ import javax.inject.Inject
 import javax.ws.rs.ForbiddenException
 
 @RestController
-@ProtectedWithClaims(issuer = OIDCIssuer.EKSTERN)
+@ProtectedWithClaims(issuer = EKSTERN)
 @RequestMapping(value = ["/api/person/{fnr}"])
 class PersonController @Inject constructor(
     private val metric: Metric,
-    private val contextHolder: OIDCRequestContextHolder,
+    private val contextHolder: TokenValidationContextHolder,
     private val pdlConsumer: PdlConsumer,
     private val tilgangskontrollService: TilgangskontrollService
 ) {
