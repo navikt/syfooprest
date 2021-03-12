@@ -9,6 +9,7 @@ A list of the exposeddata:
 * `Arbeidsforhold`
 * `Kontaktinfo`
 * `Name of person`
+* `Nærmeste ledere`
 * `Nærmeste leder`
 * `Virksomhet`
 
