@@ -18,16 +18,16 @@ import javax.ws.rs.NotFoundException
 @ProtectedWithClaims(issuer = EKSTERN)
 @RequestMapping(value = ["/api/naermesteleder/{fnr}"])
 class NaermesteLederController @Inject constructor(
-        private val metric: Metric,
-        private val contextHolder: TokenValidationContextHolder,
-        private val tilgangskontrollService: TilgangskontrollService,
-        private val narmesteLederMapper: NarmesteLederMapper,
-        private val narmesteLederConsumer: NarmesteLederConsumer
+    private val metric: Metric,
+    private val contextHolder: TokenValidationContextHolder,
+    private val tilgangskontrollService: TilgangskontrollService,
+    private val narmesteLederMapper: NarmesteLederMapper,
+    private val narmesteLederConsumer: NarmesteLederConsumer
 ) {
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
     fun hentNaermesteLeder(
-            @PathVariable("fnr") fnr: String,
-            @RequestParam("virksomhetsnummer") virksomhetsnummer: String
+        @PathVariable("fnr") fnr: String,
+        @RequestParam("virksomhetsnummer") virksomhetsnummer: String
     ): RSNaermesteLeder {
         metric.countEndpointRequest("hentNaermesteLeder")
         val innloggetFnr = OIDCUtil.getSubjectEkstern(contextHolder)

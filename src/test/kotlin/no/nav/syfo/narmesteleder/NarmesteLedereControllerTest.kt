@@ -49,7 +49,7 @@ class NarmesteLedereControllerTest {
         every { metric.countEndpointRequest(any()) } just Runs
         every { tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(UserConstants.LEDER_FNR, UserConstants.ARBEIDSTAKER_FNR) }.returns(false)
 
-        val narmesteLedere = listOf<Naermesteleder>( Naermesteleder(
+        val narmesteLedere = listOf<Naermesteleder>(Naermesteleder(
                 naermesteLederId = 0L,
                 naermesteLederAktoerId = UserConstants.LEDER_AKTORID,
                 naermesteLederStatus = NaermesteLederStatus(

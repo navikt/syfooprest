@@ -1,11 +1,11 @@
 package no.nav.syfo.narmesteleder.consumer
 
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
-import no.nav.syfo.metric.Metric
 import no.nav.syfo.api.auth.OIDCIssuer
+import no.nav.syfo.api.auth.OIDCUtil
+import no.nav.syfo.metric.Metric
 import no.nav.syfo.util.NAV_PERSONIDENT
 import no.nav.syfo.util.bearerHeader
-import no.nav.syfo.api.auth.OIDCUtil
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.ParameterizedTypeReference
