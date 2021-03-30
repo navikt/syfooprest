@@ -48,11 +48,6 @@ class NarmesteLedereController @Inject constructor(
                 narmesteLedere.filter { it.naermesteLederStatus.erAktiv }.forEach {
                     narmesteLedereMapped.add(narmesteLederMapper.map(it))
                 }
-
-                if (narmesteLedereMapped.isEmpty()) {
-                    throw NotFoundException()
-                }
-
                 return narmesteLedereMapped
             }
         }

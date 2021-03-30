@@ -89,51 +89,6 @@ class NarmesteLedereControllerTest {
     }
 
     @Test()
-    fun hentNaermesteLedere_ingenAktiveNarmesteLedereIResponse_NotFoundExceptionThrown() {
-        every { oidcRequestContextHolder.tokenValidationContext }.returns(
-            getValidationContext(UserConstants.LEDER_FNR)
-        )
-        every { metric.countEndpointRequest(any()) } just Runs
-        every { tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(UserConstants.LEDER_FNR, UserConstants.ARBEIDSTAKER_FNR) }.returns(false)
-
-        val narmesteLedere = listOf<Naermesteleder>(Naermesteleder(
-            naermesteLederId = 0L,
-            naermesteLederAktoerId = UserConstants.LEDER_AKTORID,
-            naermesteLederStatus = NaermesteLederStatus(
-                erAktiv = false,
-                aktivFom = LocalDate.now().minusDays(1),
-                aktivTom = LocalDate.now()
-            ),
-            orgnummer = UserConstants.VIRKSOMHETSNUMMER,
-            navn = "",
-            epost = null,
-            mobil = null
-        ))
-
-        val narmesteLeder = narmesteLedere.get(0)
-
-        val rsLeder = RSNaermesteLeder(
-            virksomhetsnummer = narmesteLeder.orgnummer,
-            navn = narmesteLeder.navn,
-            epost = narmesteLeder.epost,
-            tlf = narmesteLeder.mobil,
-            erAktiv = narmesteLeder.naermesteLederStatus.erAktiv,
-            aktivFom = narmesteLeder.naermesteLederStatus.aktivFom,
-            aktivTom = narmesteLeder.naermesteLederStatus.aktivTom,
-            fnr = UserConstants.LEDER_FNR,
-            samtykke = null,
-            sistInnlogget = null
-        )
-
-        every { narmesteLedereConsumer.narmesteLedere(any()) }.returns(narmesteLedere)
-        every { narmesteLederMapper.map(any()) }.returns(rsLeder)
-
-        assertThrows(NotFoundException::class.java) {
-            narmesteledereController.hentNermesteLedere(UserConstants.ARBEIDSTAKER_FNR)
-        }
-    }
-
-    @Test()
     fun hentNaermesteLedere_nullResponse_NotFoundExceptionThrown() {
         every { oidcRequestContextHolder.tokenValidationContext }.returns(
             getValidationContext(UserConstants.LEDER_FNR)
