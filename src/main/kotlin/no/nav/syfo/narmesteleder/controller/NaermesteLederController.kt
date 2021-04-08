@@ -2,28 +2,26 @@ package no.nav.syfo.narmesteleder.controller
 
 import no.nav.security.token.support.core.api.ProtectedWithClaims
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
-import no.nav.syfo.metric.Metric
-import no.nav.syfo.narmesteleder.consumer.Naermesteleder
-import no.nav.syfo.narmesteleder.consumer.NarmesteLederConsumer
-import no.nav.syfo.consumer.aktorregister.AktorregisterConsumer
-import no.nav.syfo.tilgang.TilgangskontrollService
+import no.nav.syfo.api.auth.OIDCIssuer.EKSTERN
 import no.nav.syfo.api.auth.OIDCUtil
+import no.nav.syfo.metric.Metric
+import no.nav.syfo.narmesteleder.consumer.NarmesteLederConsumer
+import no.nav.syfo.tilgang.TilgangskontrollService
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import javax.inject.Inject
 import javax.ws.rs.ForbiddenException
 import javax.ws.rs.NotFoundException
-import no.nav.syfo.api.auth.OIDCIssuer.EKSTERN
 
 @RestController
 @ProtectedWithClaims(issuer = EKSTERN)
 @RequestMapping(value = ["/api/naermesteleder/{fnr}"])
-class NaermestelederController @Inject constructor(
+class NaermesteLederController @Inject constructor(
     private val metric: Metric,
     private val contextHolder: TokenValidationContextHolder,
     private val tilgangskontrollService: TilgangskontrollService,
-    private val aktorregisterConsumer: AktorregisterConsumer,
+    private val narmesteLederMapper: NarmesteLederMapper,
     private val narmesteLederConsumer: NarmesteLederConsumer
 ) {
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -38,37 +36,22 @@ class NaermestelederController @Inject constructor(
             throw ForbiddenException()
         }
 
-        val naermesteleder = narmesteLederConsumer.narmesteLeder(fnr, virksomhetsnummer)
+        val narmesteleder = narmesteLederConsumer.narmesteLeder(fnr, virksomhetsnummer)
+
         when {
-            naermesteleder == null -> {
+            narmesteleder == null -> {
                 throw NotFoundException()
             }
-            !naermesteleder.naermesteLederStatus.erAktiv -> {
+            !narmesteleder.naermesteLederStatus.erAktiv -> {
                 throw NotFoundException()
             }
             else -> {
-                return mapNaermesteLeder(naermesteleder)
+                return narmesteLederMapper.map(narmesteleder)
             }
         }
     }
 
-    private fun mapNaermesteLeder(naermesteleder: Naermesteleder): RSNaermesteLeder {
-        val lederFnr = aktorregisterConsumer.hentFnrForAktor(naermesteleder.naermesteLederAktoerId)
-        return RSNaermesteLeder(
-            virksomhetsnummer = naermesteleder.orgnummer,
-            navn = naermesteleder.navn,
-            epost = naermesteleder.epost,
-            tlf = naermesteleder.mobil,
-            erAktiv = naermesteleder.naermesteLederStatus.erAktiv,
-            aktivFom = naermesteleder.naermesteLederStatus.aktivFom,
-            aktivTom = naermesteleder.naermesteLederStatus.aktivTom,
-            fnr = lederFnr,
-            samtykke = null,
-            sistInnlogget = null
-        )
-    }
-
     companion object {
-        private val LOG = LoggerFactory.getLogger(NaermestelederController::class.java)
+        private val LOG = LoggerFactory.getLogger(NaermesteLederController::class.java)
     }
 }

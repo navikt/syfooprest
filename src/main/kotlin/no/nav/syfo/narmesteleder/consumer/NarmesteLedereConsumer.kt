@@ -1,11 +1,11 @@
 package no.nav.syfo.narmesteleder.consumer
 
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
-import no.nav.syfo.api.auth.OIDCIssuer
-import no.nav.syfo.api.auth.OIDCUtil
 import no.nav.syfo.metric.Metric
+import no.nav.syfo.api.auth.OIDCIssuer
 import no.nav.syfo.util.NAV_PERSONIDENT
 import no.nav.syfo.util.bearerHeader
+import no.nav.syfo.api.auth.OIDCUtil
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.ParameterizedTypeReference
@@ -18,33 +18,33 @@ import org.springframework.web.client.RestClientException
 import org.springframework.web.client.RestTemplate
 
 @Service
-class NarmesteLederConsumer(
+class NarmesteLedereConsumer(
     private val contextHolder: TokenValidationContextHolder,
     private val metric: Metric,
     private val restTemplate: RestTemplate,
     @param:Value("\${syfoapi.url}") private val baseUrl: String
 ) {
-    fun narmesteLeder(ansattFnr: String, virksomhetsnummer: String): Naermesteleder? {
+    fun narmesteLedere(ansattFnr: String): List<Naermesteleder>? {
         return try {
-            val response = restTemplate.exchange<Naermesteleder>(
-                getNarmesteLederUrl(virksomhetsnummer),
+            val response = restTemplate.exchange(
+                getNarmesteLedereUrl(),
                 HttpMethod.GET,
                 entity(ansattFnr),
-                object : ParameterizedTypeReference<Naermesteleder>() {}
+                object : ParameterizedTypeReference<List<Naermesteleder>>() {}
             )
             if (response.statusCode == HttpStatus.NO_CONTENT) {
-                metric.countEvent("call_syfoapi_narmesteleder_nocontent")
+                metric.countEvent("call_syfoapi_narmesteledere_nocontent")
             } else if (response.statusCode != HttpStatus.OK) {
-                metric.countEvent("call_syfoapi_narmesteleder_fail")
+                metric.countEvent("call_syfoapi_narmesteledere_fail")
                 val message = ERROR_MESSAGE_BASE + response.statusCode
                 LOG.error(message)
                 throw RuntimeException(message)
             }
-            metric.countEvent("call_syfoapi_narmesteleder_success")
+            metric.countEvent("call_syfoapi_narmesteledere_success")
             response.body
         } catch (e: RestClientException) {
             LOG.error(ERROR_MESSAGE_BASE, e)
-            metric.countEvent("call_syfoapi_narmesteleder_fail")
+            metric.countEvent("call_syfoapi_narmesteledere_fail")
             throw e
         }
     }
@@ -56,12 +56,12 @@ class NarmesteLederConsumer(
         return HttpEntity<Any>(headers)
     }
 
-    private fun getNarmesteLederUrl(virksomhetsnummer: String): String {
-        return "$baseUrl/syfooppfolgingsplanservice/api/narmesteleder/$virksomhetsnummer"
+    private fun getNarmesteLedereUrl(): String {
+        return "$baseUrl/syfooppfolgingsplanservice/api/narmesteledere"
     }
 
     companion object {
-        private val LOG = LoggerFactory.getLogger(NarmesteLederConsumer::class.java)
-        const val ERROR_MESSAGE_BASE = "Error requesting Naermeste Leder from syfoppfolgingsplanservice via syfoapi"
+        private val LOG = LoggerFactory.getLogger(NarmesteLedereConsumer::class.java)
+        const val ERROR_MESSAGE_BASE = "Error requesting Naermeste Ledere from syfoppfolgingsplanservice via syfoapi"
     }
 }
