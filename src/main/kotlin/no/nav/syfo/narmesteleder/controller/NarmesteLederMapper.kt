@@ -9,7 +9,7 @@ import javax.inject.Inject
 class NarmesteLederMapper @Inject constructor(private val aktorregisterConsumer: AktorregisterConsumer) {
 
     fun map(naermesteleder: Naermesteleder): RSNaermesteLeder {
-        val lederFodselsnummer = aktorregisterConsumer.hentFnrForAktor(naermesteleder.naermesteLederAktoerId)
+        val lederFodselsnummer = naermesteleder.naermesteLederFnr?:aktorregisterConsumer.hentFnrForAktor(naermesteleder.naermesteLederAktoerId!!)
         return RSNaermesteLeder(
                 virksomhetsnummer = naermesteleder.orgnummer,
                 navn = naermesteleder.navn,

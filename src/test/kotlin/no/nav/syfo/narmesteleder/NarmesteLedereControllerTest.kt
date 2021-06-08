@@ -54,6 +54,7 @@ class NarmesteLedereControllerTest {
 
         val narmesteLedere = listOf<Naermesteleder>(Naermesteleder(
             naermesteLederId = 0L,
+            naermesteLederFnr = null,
             naermesteLederAktoerId = UserConstants.LEDER_AKTORID,
             naermesteLederStatus = NaermesteLederStatus(
                 erAktiv = true,
