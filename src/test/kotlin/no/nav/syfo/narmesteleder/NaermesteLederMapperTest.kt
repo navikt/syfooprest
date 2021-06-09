@@ -20,7 +20,7 @@ class NaermesteLederMapperTest {
 
     private val aktorregisterConsumer: AktorregisterConsumer = mockk()
 
-    private val narmesteLederMapper = NarmesteLederMapper (aktorregisterConsumer)
+    private val narmesteLederMapper = NarmesteLederMapper(aktorregisterConsumer)
 
     @Test
     fun mapNaermesteLederMedAktorIdSuccess() {
