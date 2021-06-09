@@ -17,7 +17,6 @@ import java.time.LocalDate
 @ExtendWith(SpringExtension::class)
 class NaermesteLederMapperTest {
 
-
     private val aktorregisterConsumer: AktorregisterConsumer = mockk()
 
     private val narmesteLederMapper = NarmesteLederMapper(aktorregisterConsumer)
