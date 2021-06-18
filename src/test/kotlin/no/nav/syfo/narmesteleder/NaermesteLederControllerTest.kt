@@ -52,7 +52,6 @@ class NaermesteLederControllerTest {
         val leder = Naermesteleder(
                 naermesteLederId = 0L,
                 naermesteLederFnr = UserConstants.LEDER_FNR,
-                naermesteLederAktoerId = null,
                 naermesteLederStatus = NaermesteLederStatus(
                         erAktiv = true,
                         aktivFom = LocalDate.now().minusDays(1),

@@ -8,6 +8,7 @@ import no.nav.syfo.narmesteleder.consumer.Naermesteleder
 import no.nav.syfo.narmesteleder.controller.NarmesteLederMapper
 import no.nav.syfo.narmesteleder.controller.RSNaermesteLeder
 import no.nav.syfo.testhelper.UserConstants
+import no.nav.syfo.testhelper.UserConstants.LEDER_FNR
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -25,8 +26,7 @@ class NaermesteLederMapperTest {
     fun mapNaermesteLederMedAktorIdSuccess() {
         val leder = Naermesteleder(
                 naermesteLederId = 0L,
-                naermesteLederFnr = null,
-                naermesteLederAktoerId = UserConstants.LEDER_AKTORID,
+                naermesteLederFnr = LEDER_FNR,
                 naermesteLederStatus = NaermesteLederStatus(
                         erAktiv = true,
                         aktivFom = LocalDate.now().minusDays(1),
@@ -46,12 +46,12 @@ class NaermesteLederMapperTest {
                 erAktiv = leder.naermesteLederStatus.erAktiv,
                 aktivFom = leder.naermesteLederStatus.aktivFom,
                 aktivTom = leder.naermesteLederStatus.aktivTom,
-                fnr = UserConstants.LEDER_FNR,
+                fnr = LEDER_FNR,
                 samtykke = null,
                 sistInnlogget = null
         )
 
-        every { aktorregisterConsumer.hentFnrForAktor(UserConstants.LEDER_AKTORID) }.returns(UserConstants.LEDER_FNR)
+        every { aktorregisterConsumer.hentFnrForAktor(UserConstants.LEDER_AKTORID) }.returns(LEDER_FNR)
 
         val rsNaermesteLeder = narmesteLederMapper.map(leder)
 
@@ -62,8 +62,7 @@ class NaermesteLederMapperTest {
     fun mapNaermesteLederMedFnrSuccess() {
         val leder = Naermesteleder(
                 naermesteLederId = 0L,
-                naermesteLederFnr = UserConstants.LEDER_FNR,
-                naermesteLederAktoerId = null,
+                naermesteLederFnr = LEDER_FNR,
                 naermesteLederStatus = NaermesteLederStatus(
                         erAktiv = true,
                         aktivFom = LocalDate.now().minusDays(1),
@@ -83,7 +82,7 @@ class NaermesteLederMapperTest {
                 erAktiv = leder.naermesteLederStatus.erAktiv,
                 aktivFom = leder.naermesteLederStatus.aktivFom,
                 aktivTom = leder.naermesteLederStatus.aktivTom,
-                fnr = UserConstants.LEDER_FNR,
+                fnr = LEDER_FNR,
                 samtykke = null,
                 sistInnlogget = null
         )

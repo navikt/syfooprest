@@ -14,6 +14,7 @@ import no.nav.syfo.narmesteleder.controller.NarmesteLedereController
 import no.nav.syfo.narmesteleder.controller.RSNaermesteLeder
 import no.nav.syfo.testhelper.OidcTestHelper.getValidationContext
 import no.nav.syfo.testhelper.UserConstants
+import no.nav.syfo.testhelper.UserConstants.LEDER_FNR
 import no.nav.syfo.tilgang.TilgangskontrollService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
@@ -47,15 +48,14 @@ class NarmesteLedereControllerTest {
     @Test
     fun hentNaermesteLedere_success() {
         every { oidcRequestContextHolder.tokenValidationContext }.returns(
-            getValidationContext(UserConstants.LEDER_FNR)
+            getValidationContext(LEDER_FNR)
         )
         every { metric.countEndpointRequest(any()) } just Runs
-        every { tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(UserConstants.LEDER_FNR, UserConstants.ARBEIDSTAKER_FNR) }.returns(false)
+        every { tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(LEDER_FNR, UserConstants.ARBEIDSTAKER_FNR) }.returns(false)
 
         val narmesteLedere = listOf<Naermesteleder>(Naermesteleder(
             naermesteLederId = 0L,
-            naermesteLederFnr = null,
-            naermesteLederAktoerId = UserConstants.LEDER_AKTORID,
+            naermesteLederFnr = LEDER_FNR,
             naermesteLederStatus = NaermesteLederStatus(
                 erAktiv = true,
                 aktivFom = LocalDate.now().minusDays(1),
@@ -77,7 +77,7 @@ class NarmesteLedereControllerTest {
             erAktiv = narmesteLeder.naermesteLederStatus.erAktiv,
             aktivFom = narmesteLeder.naermesteLederStatus.aktivFom,
             aktivTom = narmesteLeder.naermesteLederStatus.aktivTom,
-            fnr = UserConstants.LEDER_FNR,
+            fnr = LEDER_FNR,
             samtykke = null,
             sistInnlogget = null
         )
@@ -86,16 +86,16 @@ class NarmesteLedereControllerTest {
         every { narmesteLederMapper.map(any()) }.returns(rsLeder)
 
         val rsNaermesteLedere = narmesteledereController.hentNermesteLedere(UserConstants.ARBEIDSTAKER_FNR)
-        assertEquals(UserConstants.LEDER_FNR, rsNaermesteLedere.get(0).fnr)
+        assertEquals(LEDER_FNR, rsNaermesteLedere.get(0).fnr)
     }
 
     @Test()
     fun hentNaermesteLedere_nullResponse_NotFoundExceptionThrown() {
         every { oidcRequestContextHolder.tokenValidationContext }.returns(
-            getValidationContext(UserConstants.LEDER_FNR)
+            getValidationContext(LEDER_FNR)
         )
         every { metric.countEndpointRequest(any()) } just Runs
-        every { tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(UserConstants.LEDER_FNR, UserConstants.ARBEIDSTAKER_FNR) }.returns(false)
+        every { tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(LEDER_FNR, UserConstants.ARBEIDSTAKER_FNR) }.returns(false)
         every { narmesteLedereConsumer.narmesteLedere(any()) }.returns(null)
 
         assertThrows(NotFoundException::class.java) {
@@ -106,10 +106,10 @@ class NarmesteLedereControllerTest {
     @Test()
     fun hentNaermesteLedere_harIkkeTilgang_ForbiddenExceptionThrown() {
         every { oidcRequestContextHolder.tokenValidationContext }.returns(
-            getValidationContext(UserConstants.LEDER_FNR)
+            getValidationContext(LEDER_FNR)
         )
         every { metric.countEndpointRequest(any()) } just Runs
-        every { tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(UserConstants.LEDER_FNR, UserConstants.ARBEIDSTAKER_FNR) }.returns(true)
+        every { tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(LEDER_FNR, UserConstants.ARBEIDSTAKER_FNR) }.returns(true)
 
         assertThrows(ForbiddenException::class.java) {
             narmesteledereController.hentNermesteLedere(UserConstants.ARBEIDSTAKER_FNR)
