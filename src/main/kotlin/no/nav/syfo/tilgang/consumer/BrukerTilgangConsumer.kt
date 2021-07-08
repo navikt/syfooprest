@@ -1,11 +1,11 @@
 package no.nav.syfo.tilgang.consumer
 
 import no.nav.security.token.support.core.context.TokenValidationContextHolder
-import no.nav.syfo.metric.Metric
 import no.nav.syfo.api.auth.OIDCIssuer
+import no.nav.syfo.api.auth.OIDCUtil
+import no.nav.syfo.metric.Metric
 import no.nav.syfo.util.NAV_PERSONIDENT
 import no.nav.syfo.util.bearerHeader
-import no.nav.syfo.api.auth.OIDCUtil
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
@@ -17,22 +17,28 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 class BrukerTilgangConsumer(
-    private val contextHolder: TokenValidationContextHolder,
-    private val metric: Metric,
-    private val restTemplate: RestTemplate,
-    @param:Value("\${syfoapi.url}") private val baseUrl: String
+        private val contextHolder: TokenValidationContextHolder,
+        private val metric: Metric,
+        private val restTemplate: RestTemplate,
+        @param:Value("\${syfoapi.url}") private val baseUrl: String
 ) {
     fun hasAccessToAnsatt(ansattFnr: String): Boolean {
         return try {
             val response = restTemplate.exchange<BrukerTilgang>(
-                accessAnsattUrl,
-                HttpMethod.GET,
-                entity(ansattFnr),
-                BrukerTilgang::class.java
+                    accessAnsattUrl,
+                    HttpMethod.GET,
+                    entity(ansattFnr),
+                    BrukerTilgang::class.java
             )
-            val responseBody = response.body!!
             metric.countOutgoingReponses(METRIC_CALL_BRUKERTILGANG, response.statusCodeValue)
-            responseBody.tilgang
+            val responseBody = response.body
+
+            if (responseBody != null) {
+                responseBody.tilgang
+            } else {
+                LOG.warn("Body in response from BrukerTilgang was null")
+                false
+            }
         } catch (e: RestClientResponseException) {
             metric.countOutgoingReponses(METRIC_CALL_BRUKERTILGANG, e.rawStatusCode)
             if (e.rawStatusCode == 401) {
