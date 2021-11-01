@@ -34,6 +34,7 @@ spec:
     enabled: true
     path: /syfooprest/internal/prometheus
   ingresses:
+    - "https://syfooprest.dev.nav.no"
     - "https://syfooprest.nais.oera-q.local"
     - "https://syfooprest-q.nav.no"
   vault:
