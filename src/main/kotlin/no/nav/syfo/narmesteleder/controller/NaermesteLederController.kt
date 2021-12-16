@@ -21,7 +21,6 @@ class NaermesteLederController @Inject constructor(
     private val metric: Metric,
     private val contextHolder: TokenValidationContextHolder,
     private val tilgangskontrollService: TilgangskontrollService,
-    private val narmesteLederMapper: NarmesteLederMapper,
     private val narmesteLederConsumer: NarmesteLederConsumer
 ) {
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -46,7 +45,7 @@ class NaermesteLederController @Inject constructor(
                 throw NotFoundException()
             }
             else -> {
-                return narmesteLederMapper.map(narmesteleder)
+                return mapNarmesteLeder(narmesteleder)
             }
         }
     }

@@ -9,9 +9,7 @@ import no.nav.syfo.metric.Metric
 import no.nav.syfo.narmesteleder.consumer.NaermesteLederStatus
 import no.nav.syfo.narmesteleder.consumer.Naermesteleder
 import no.nav.syfo.narmesteleder.consumer.NarmesteLedereConsumer
-import no.nav.syfo.narmesteleder.controller.NarmesteLederMapper
 import no.nav.syfo.narmesteleder.controller.NarmesteLedereController
-import no.nav.syfo.narmesteleder.controller.RSNaermesteLeder
 import no.nav.syfo.testhelper.OidcTestHelper.getValidationContext
 import no.nav.syfo.testhelper.UserConstants
 import no.nav.syfo.testhelper.UserConstants.LEDER_FNR
@@ -27,8 +25,6 @@ import javax.ws.rs.NotFoundException
 
 @ExtendWith(SpringExtension::class)
 class NarmesteLedereControllerTest {
-    private val narmesteLederMapper: NarmesteLederMapper = mockk()
-
     private val oidcRequestContextHolder: TokenValidationContextHolder = mockk()
 
     private val tilgangskontrollService: TilgangskontrollService = mockk()
@@ -41,7 +37,6 @@ class NarmesteLedereControllerTest {
         metric,
         oidcRequestContextHolder,
         tilgangskontrollService,
-        narmesteLederMapper,
         narmesteLedereConsumer
     )
 
@@ -53,7 +48,7 @@ class NarmesteLedereControllerTest {
         every { metric.countEndpointRequest(any()) } just Runs
         every { tilgangskontrollService.sporOmNoenAndreEnnSegSelvEllerEgneAnsatte(LEDER_FNR, UserConstants.ARBEIDSTAKER_FNR) }.returns(false)
 
-        val narmesteLedere = listOf<Naermesteleder>(Naermesteleder(
+        val narmesteLedere = listOf(Naermesteleder(
             naermesteLederId = 0L,
             naermesteLederFnr = LEDER_FNR,
             naermesteLederStatus = NaermesteLederStatus(
@@ -67,23 +62,7 @@ class NarmesteLedereControllerTest {
             mobil = null
         ))
 
-        val narmesteLeder = narmesteLedere.get(0)
-
-        val rsLeder = RSNaermesteLeder(
-            virksomhetsnummer = narmesteLeder.orgnummer,
-            navn = narmesteLeder.navn,
-            epost = narmesteLeder.epost,
-            tlf = narmesteLeder.mobil,
-            erAktiv = narmesteLeder.naermesteLederStatus.erAktiv,
-            aktivFom = narmesteLeder.naermesteLederStatus.aktivFom,
-            aktivTom = narmesteLeder.naermesteLederStatus.aktivTom,
-            fnr = LEDER_FNR,
-            samtykke = null,
-            sistInnlogget = null
-        )
-
         every { narmesteLedereConsumer.narmesteLedere(any()) }.returns(narmesteLedere)
-        every { narmesteLederMapper.map(any()) }.returns(rsLeder)
 
         val rsNaermesteLedere = narmesteledereController.hentNermesteLedere(UserConstants.ARBEIDSTAKER_FNR)
         assertEquals(LEDER_FNR, rsNaermesteLedere.get(0).fnr)

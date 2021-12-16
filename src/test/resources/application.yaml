@@ -28,7 +28,6 @@ no.nav.security.oidc:
       cookie_name: localhost-idtoken
 
 syfoapi.url: "http://syfoapi"
-aktoer.v2.endpointurl: "aktoerv2.url"
 virksomhet:
   arbeidsforhold.v3.endpointurl: "arbeidsforhold.url"
   digitalkontakinformasjon.v1.endpointurl: "dkif.url"
@@ -38,7 +37,6 @@ nais.cluster.name: 'local'
 environment.name: 'dev'
 fasit.environment.name: 'local'
 
-aktoer.withmock: true
 arbeidsforhold.aareg.withmock: true
 dkif.withmock: true
 ereg.withmock: true

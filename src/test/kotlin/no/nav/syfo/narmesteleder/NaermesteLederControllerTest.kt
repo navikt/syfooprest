@@ -10,8 +10,6 @@ import no.nav.syfo.narmesteleder.consumer.NaermesteLederStatus
 import no.nav.syfo.narmesteleder.consumer.Naermesteleder
 import no.nav.syfo.narmesteleder.consumer.NarmesteLederConsumer
 import no.nav.syfo.narmesteleder.controller.NaermesteLederController
-import no.nav.syfo.narmesteleder.controller.NarmesteLederMapper
-import no.nav.syfo.narmesteleder.controller.RSNaermesteLeder
 import no.nav.syfo.testhelper.OidcTestHelper.getValidationContext
 import no.nav.syfo.testhelper.UserConstants
 import no.nav.syfo.tilgang.TilgangskontrollService
@@ -23,8 +21,6 @@ import java.time.LocalDate
 
 @ExtendWith(SpringExtension::class)
 class NaermesteLederControllerTest {
-    private val narmesteLederMapper: NarmesteLederMapper = mockk()
-
     private val oidcRequestContextHolder: TokenValidationContextHolder = mockk()
 
     private val tilgangskontrollService: TilgangskontrollService = mockk()
@@ -37,7 +33,6 @@ class NaermesteLederControllerTest {
             metric,
             oidcRequestContextHolder,
             tilgangskontrollService,
-            narmesteLederMapper,
             narmesteLederConsumer
     )
 
@@ -63,21 +58,7 @@ class NaermesteLederControllerTest {
                 mobil = null
         )
 
-        val rsLeder = RSNaermesteLeder(
-                virksomhetsnummer = leder.orgnummer,
-                navn = leder.navn,
-                epost = leder.epost,
-                tlf = leder.mobil,
-                erAktiv = leder.naermesteLederStatus.erAktiv,
-                aktivFom = leder.naermesteLederStatus.aktivFom,
-                aktivTom = leder.naermesteLederStatus.aktivTom,
-                fnr = UserConstants.LEDER_FNR,
-                samtykke = null,
-                sistInnlogget = null
-        )
-
         every { narmesteLederConsumer.narmesteLeder(any(), any()) }.returns(leder)
-        every { narmesteLederMapper.map(any()) }.returns(rsLeder)
 
         val rsNaermesteLeder = naermestelederController.hentNaermesteLeder(UserConstants.ARBEIDSTAKER_FNR, UserConstants.VIRKSOMHETSNUMMER)
 
