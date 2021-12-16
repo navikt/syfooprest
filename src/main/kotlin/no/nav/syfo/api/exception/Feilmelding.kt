@@ -11,12 +11,6 @@ class Feilmelding {
         ARBEIDSFORHOLD_GENERELL_FEIL(Response.Status.INTERNAL_SERVER_ERROR, "feilmelding.arbeidstaker.generell.feil"
         ),
         GENERELL_FEIL(Response.Status.INTERNAL_SERVER_ERROR, "feilmelding.generell.feil"
-        ),
-        IKKE_FOEDSELSNUMMER(Response.Status.INTERNAL_SERVER_ERROR, "feilmelding.ikke.fnr"
-        ),
-        INGEN_AKTOER_ID(Response.Status.INTERNAL_SERVER_ERROR, "feilmelding.ingen.aktoer.id"
-        ),
-        AKTOER_IKKE_FUNNET(Response.Status.INTERNAL_SERVER_ERROR, "feilmelding.aktoer.ikke.funnet"
         );
     }
 

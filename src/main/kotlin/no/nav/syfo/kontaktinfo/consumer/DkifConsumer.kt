@@ -1,6 +1,5 @@
 package no.nav.syfo.kontaktinfo.consumer
 
-import no.nav.syfo.consumer.aktorregister.AktorregisterConsumer
 import no.nav.syfo.kontaktinfo.controller.FeilAarsak
 import no.nav.syfo.kontaktinfo.controller.RSKontaktinfo
 import no.nav.syfo.util.convertToOffsetDateTime
@@ -18,8 +17,7 @@ import javax.xml.datatype.XMLGregorianCalendar
 
 @Service
 class DkifConsumer @Inject constructor(
-    private val dkifV1: DigitalKontaktinformasjonV1,
-    private val aktorregisterConsumer: AktorregisterConsumer
+    private val dkifV1: DigitalKontaktinformasjonV1
 ) {
     @Cacheable(cacheNames = ["kontaktinfoByFnr"], key = "#fnr", condition = "#fnr != null")
     fun hentRSKontaktinfoFnr(fnr: String): RSKontaktinfo {
@@ -91,8 +89,8 @@ class DkifConsumer @Inject constructor(
     }
 
     @Cacheable(cacheNames = ["kontaktinfoByAktorId"], key = "#aktoerId", condition = "#aktoerId != null")
-    fun hentRSKontaktinfoAktoerId(aktoerId: String): RSKontaktinfo {
-        return hentRSKontaktinfoFnr(aktorregisterConsumer.hentFnrForAktor(aktoerId))
+    fun hentRSKontaktinfoAktoerId(fnr: String): RSKontaktinfo {
+        return hentRSKontaktinfoFnr(fnr)
     }
 
     companion object {

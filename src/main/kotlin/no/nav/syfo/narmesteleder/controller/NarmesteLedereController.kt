@@ -21,7 +21,6 @@ class NarmesteLedereController @Inject constructor(
     private val metric: Metric,
     private val contextHolder: TokenValidationContextHolder,
     private val tilgangskontrollService: TilgangskontrollService,
-    private val narmesteLederMapper: NarmesteLederMapper,
     private val narmesteLedereConsumer: NarmesteLedereConsumer
 ) {
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -46,7 +45,7 @@ class NarmesteLedereController @Inject constructor(
                 val narmesteLedereMapped = mutableListOf<RSNaermesteLeder>()
 
                 narmesteLedere.filter { it.naermesteLederStatus.erAktiv }.forEach {
-                    narmesteLedereMapped.add(narmesteLederMapper.map(it))
+                    narmesteLedereMapped.add(mapNarmesteLeder(it))
                 }
                 return narmesteLedereMapped
             }

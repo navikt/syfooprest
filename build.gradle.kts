@@ -94,7 +94,6 @@ dependencies {
     implementation("no.nav.tjenestespesifikasjoner:nav-arbeidsforhold-v3-tjenestespesifikasjon:$tjenestespesifikasjonerVersion")
     implementation("no.nav.tjenestespesifikasjoner:dkif-tjenestespesifikasjon:$tjenestespesifikasjonerVersion")
     implementation("no.nav.tjenestespesifikasjoner:organisasjonv4-tjenestespesifikasjon:$tjenestespesifikasjonerVersion")
-    implementation("no.nav.tjenestespesifikasjoner:dial-nav-tjeneste-aktoer_v2:$tjenestespesifikasjonerVersion")
 }
 
 tasks {
