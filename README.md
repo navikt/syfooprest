@@ -1,5 +1,7 @@
 # syfooprest
 
+Denne appen er ikke i bruk lenger etter utfasing av SBS.
+
 Syfooprest is REST-API in SBS offering information regarding `Arbeidsgiver` and `Arbeidstaker`
 to the following applications in SBS:
 * oppfolgingsplan (Ditt NAV)
